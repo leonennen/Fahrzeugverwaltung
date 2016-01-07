@@ -1,24 +1,12 @@
-package de.decoit.fahrzeugverwaltung;
-
-import de.decoit.fahrzeugverwaltung.KFZ;
+package de.decoit.fahrzeugverwaltung.Fahrzeug;
 
 public class Verschleißwerte {
 
-//    public double kleinwagenverschleiß;
-//    public double mittelklasseverschleiß;
-//    public double oberklasseverschleiß;
-//    public double transporterverschleiß;
-//    public Verschleißwerte(double kleinwagenverschleiß, double mittelklasseverschleiß, double oberklasseverschleiß, double transporterverschleiß) {
-//        this.kleinwagenverschleiß = kleinwagenverschleiß;
-//        this.mittelklasseverschleiß = mittelklasseverschleiß;
-//        this.oberklasseverschleiß = oberklasseverschleiß;
-//        this.transporterverschleiß = transporterverschleiß;
-//    }
     public static double verschleiß(KFZ auto, int strecke) {
 
         Klasse klasse = auto.getKlasse();
         double verschleißwert = 0;
-        double streckenkorrektur = 1+(auto.getKmstand()/500000);
+        double streckenkorrektur = 1 + (auto.getKmstand() / 500000);
 
         switch (klasse) {
             case Kleinwagen:
@@ -56,7 +44,7 @@ public class Verschleißwerte {
                 throw new IllegalStateException("Undefinierte Fahrzeugklasse!");
         }
         verschleißwert = verschleißwert * streckenkorrektur;
-        
+
         return verschleißwert;
     }
 }

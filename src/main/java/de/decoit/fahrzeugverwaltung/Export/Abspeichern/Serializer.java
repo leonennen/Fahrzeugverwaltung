@@ -1,8 +1,7 @@
-package de.decoit.fahrzeugverwaltung.Speichern;
+package de.decoit.fahrzeugverwaltung.Export.Abspeichern;
 
-import de.decoit.fahrzeugverwaltung.Helper;
-import de.decoit.fahrzeugverwaltung.KFZ;
-import de.decoit.fahrzeugverwaltung.Treibstoffpreise;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.Treibstoffpreise;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -13,7 +12,8 @@ public class Serializer {
 
         try {
 
-            FileOutputStream fout = new FileOutputStream(Helper.pfadAuto());
+            PfadAuto pfad = new PfadAuto();
+            FileOutputStream fout = new FileOutputStream(pfad.pfad());
             ObjectOutputStream oos = new ObjectOutputStream(fout);
 
             for (KFZ o : autoListe) {
@@ -37,7 +37,8 @@ public class Serializer {
     public void serializeTreibstoffpreise(Treibstoffpreise treibstoffpreise) {
         try {
 
-            FileOutputStream fout = new FileOutputStream(Helper.pfadPreise());
+            PfadPreise pfad = new PfadPreise();
+            FileOutputStream fout = new FileOutputStream(pfad.pfad());
             ObjectOutputStream oos = new ObjectOutputStream(fout);
 
             oos.writeObject(treibstoffpreise);

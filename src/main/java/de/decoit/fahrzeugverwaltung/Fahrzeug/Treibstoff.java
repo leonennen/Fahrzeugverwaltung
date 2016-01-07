@@ -1,4 +1,4 @@
-package de.decoit.fahrzeugverwaltung;
+package de.decoit.fahrzeugverwaltung.Fahrzeug;
 
 
 public enum Treibstoff {

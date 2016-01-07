@@ -1,11 +1,7 @@
-package de.decoit.fahrzeugverwaltung.Speichern;
+package de.decoit.fahrzeugverwaltung.Export.Abspeichern;
 
-import de.decoit.fahrzeugverwaltung.Helper;
-import de.decoit.fahrzeugverwaltung.Helper;
-import de.decoit.fahrzeugverwaltung.KFZ;
-import de.decoit.fahrzeugverwaltung.KFZ;
-import de.decoit.fahrzeugverwaltung.Treibstoffpreise;
-import de.decoit.fahrzeugverwaltung.Treibstoffpreise;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.Treibstoffpreise;
 import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,7 +16,8 @@ public class Deserializer {
 
         try {
 
-            FileInputStream fin = new FileInputStream(Helper.pfadAuto());
+            PfadAuto pfad = new PfadAuto();
+            FileInputStream fin = new FileInputStream(pfad.pfad());
             ObjectInputStream ois = new ObjectInputStream(fin);
 
             while (true) {
@@ -38,10 +35,10 @@ public class Deserializer {
             System.out.println("Fehler beim lesen der Datei: " + ex.getMessage());
             System.out.println("---------------------------------------------------------------------------------");
         }
-        
+
         System.out.println("---------------------------------------------------------------------------------");
         System.out.println("Datei geladen mit " + autoListe.size() + " Elementen!");
-        
+
         return autoListe;
     }
 
@@ -50,7 +47,9 @@ public class Deserializer {
         Treibstoffpreise treibstoffpreise = new Treibstoffpreise(0, 0);
 
         try {
-            FileInputStream fin = new FileInputStream(Helper.pfadPreise());
+
+            PfadPreise pfad = new PfadPreise();
+            FileInputStream fin = new FileInputStream(pfad.pfad());
             ObjectInputStream ois = new ObjectInputStream(fin);
             treibstoffpreise = (Treibstoffpreise) ois.readObject();
 
@@ -64,10 +63,10 @@ public class Deserializer {
             System.out.println("Fehler beim lesen der Datei: " + ex.getMessage());
             System.out.println("---------------------------------------------------------------------------------");
         }
-        
+
         System.out.println("---------------------------------------------------------------------------------");
         System.out.println("Treibstoffpreise geladen!");
-        
+
         return treibstoffpreise;
     }
 

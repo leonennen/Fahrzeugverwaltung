@@ -1,8 +1,8 @@
-package de.decoit.fahrzeugverwaltung.Export;
+package de.decoit.fahrzeugverwaltung.Export.Ausgabe;
 
-import de.decoit.fahrzeugverwaltung.KFZ;
-import de.decoit.fahrzeugverwaltung.Klasse;
-import de.decoit.fahrzeugverwaltung.Treibstoff;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.Klasse;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.Treibstoff;
 
 public class XmlAusgabe implements AusgabeInterface {
 
