@@ -1,6 +1,6 @@
-package de.decoit.fahrzeugverwaltung.Export;
+package de.decoit.fahrzeugverwaltung.interfaceKlassen;
 
-import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
+import de.decoit.fahrzeugverwaltung.KFZ;
 import java.util.ArrayList;
 
 public interface ExportInterface {

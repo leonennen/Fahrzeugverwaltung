@@ -1,4 +1,4 @@
-package de.decoit.fahrzeugverwaltung.Export;
+package de.decoit.fahrzeugverwaltung.abstrakteKlassen;
 
 public abstract class Helper {
 

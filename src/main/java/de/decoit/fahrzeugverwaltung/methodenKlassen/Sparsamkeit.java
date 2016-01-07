@@ -1,6 +1,6 @@
-package de.decoit.fahrzeugverwaltung.Fahrzeug;
+package de.decoit.fahrzeugverwaltung.methodenKlassen;
 
-import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
+import de.decoit.fahrzeugverwaltung.KFZ;
 import java.util.ArrayList;
 
 public class Sparsamkeit {

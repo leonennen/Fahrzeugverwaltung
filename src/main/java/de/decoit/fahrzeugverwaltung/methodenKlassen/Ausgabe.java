@@ -1,8 +1,8 @@
-package de.decoit.fahrzeugverwaltung.Export;
+package de.decoit.fahrzeugverwaltung.methodenKlassen;
 
-import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
-import de.decoit.fahrzeugverwaltung.Fahrzeug.Klasse;
-import de.decoit.fahrzeugverwaltung.Fahrzeug.Treibstoff;
+import de.decoit.fahrzeugverwaltung.KFZ;
+import de.decoit.fahrzeugverwaltung.enumKlassen.Klasse;
+import de.decoit.fahrzeugverwaltung.enumKlassen.Treibstoff;
 
 public class Ausgabe{
 

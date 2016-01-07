@@ -1,17 +1,16 @@
 package de.decoit.fahrzeugverwaltung;
 
-import de.decoit.fahrzeugverwaltung.Fahrzeug.Verschleißwerte;
-import de.decoit.fahrzeugverwaltung.Fahrzeug.Klasse;
-import de.decoit.fahrzeugverwaltung.Fahrzeug.Sparsamkeit;
-import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
-import de.decoit.fahrzeugverwaltung.Fahrzeug.Treibstoffpreise;
-import de.decoit.fahrzeugverwaltung.Fahrzeug.Treibstoff;
-import de.decoit.fahrzeugverwaltung.Export.Abspeichern.Deserializer;
-import de.decoit.fahrzeugverwaltung.Export.Abspeichern.Serializer;
-import de.decoit.fahrzeugverwaltung.Export.Ausgabe;
-import de.decoit.fahrzeugverwaltung.Export.ExportInterface;
-import de.decoit.fahrzeugverwaltung.Export.ExportAuswahl;
-import de.decoit.fahrzeugverwaltung.Export.Datei;
+import de.decoit.fahrzeugverwaltung.methodenKlassen.ExportAuswahl;
+import de.decoit.fahrzeugverwaltung.methodenKlassen.Ausgabe;
+import de.decoit.fahrzeugverwaltung.methodenKlassen.Treibstoffpreise;
+import de.decoit.fahrzeugverwaltung.interfaceKlassen.ExportInterface;
+import de.decoit.fahrzeugverwaltung.enumKlassen.Datei;
+import de.decoit.fahrzeugverwaltung.enumKlassen.Treibstoff;
+import de.decoit.fahrzeugverwaltung.enumKlassen.Klasse;
+import de.decoit.fahrzeugverwaltung.methodenKlassen.Sparsamkeit;
+import de.decoit.fahrzeugverwaltung.methodenKlassen.Serializer;
+import de.decoit.fahrzeugverwaltung.methodenKlassen.Verschleißwerte;
+import de.decoit.fahrzeugverwaltung.methodenKlassen.Deserializer;
 import java.io.*;
 import java.util.*;
 
@@ -119,6 +118,10 @@ public class Main {
 
             } else if (input.equals("11")) {                                                 //Beenden
 
+                Serializer serializer = new Serializer();
+                serializer.serializeAuto(autoListe);
+                serializer.serializeTreibstoffpreise(treibstoffpreise);
+                
                 System.out.println("Wird beendet!");
                 System.exit(0);
 

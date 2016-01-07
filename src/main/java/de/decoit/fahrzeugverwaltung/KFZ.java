@@ -1,5 +1,7 @@
-package de.decoit.fahrzeugverwaltung.Fahrzeug;
+package de.decoit.fahrzeugverwaltung;
 
+import de.decoit.fahrzeugverwaltung.enumKlassen.Klasse;
+import de.decoit.fahrzeugverwaltung.enumKlassen.Treibstoff;
 import java.io.Serializable;
 
 public class KFZ implements Serializable {

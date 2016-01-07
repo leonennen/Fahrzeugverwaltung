@@ -1,13 +1,12 @@
-package de.decoit.fahrzeugverwaltung.Export;
+package de.decoit.fahrzeugverwaltung.subKlassen;
 
-import de.decoit.fahrzeugverwaltung.Export.Abspeichern.BerichtName;
-import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
-import de.decoit.fahrzeugverwaltung.Export.Abspeichern.PfadDatei;
+import de.decoit.fahrzeugverwaltung.interfaceKlassen.ExportInterface;
+import de.decoit.fahrzeugverwaltung.KFZ;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-public class BerichtExport implements ExportInterface {
+public class CsvExport implements ExportInterface {
 
     @Override
     public void listeExport(String name, ArrayList<KFZ> autoListe) {
@@ -16,17 +15,17 @@ public class BerichtExport implements ExportInterface {
 
         for (KFZ auto : autoListe) {
 
-            export = export + "Kfz: Besitzer: " + auto.getBesitzer() + ", Fahrzeug: "
-                    + auto.getMarke() + " " + auto.getTyp() + ", Klasse: " + auto.getKlasse()
-                    + ", Verbrauch: " + auto.getVerbrauch()
-                    + "l/100km, Leistung: " + auto.getLeistung() + "kW, Kmstand: "
-                    + auto.getKmstand() + "km, Treibstoff: " + auto.getTreibstoff() + "\n";
+            export = export + auto.getBesitzer() + "," + auto.getMarke() + "," + auto.getTyp()
+                    + "," + auto.getKlasse() + "," + auto.getVerbrauch() + "," + auto.getLeistung() + ","
+                    + auto.getKmstand() + "," + auto.getTreibstoff() + "\n";
         }
+
+        export = "Besitzer,Marke,Typ,Klasse,Verbrauch,Leistung,Kilometerstand,Treibstoff\n" + export;
 
         System.out.println(export);
 
         PfadDatei pfad = new PfadDatei();
-        BerichtName dateiname = new BerichtName();
+        CsvName dateiname = new CsvName();
 
         try (PrintStream out = new PrintStream(new FileOutputStream(pfad.pfad() + dateiname.dateiname(name)))) {
 

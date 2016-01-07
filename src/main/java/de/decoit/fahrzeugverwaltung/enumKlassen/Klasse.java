@@ -1,4 +1,4 @@
-package de.decoit.fahrzeugverwaltung.Fahrzeug;
+package de.decoit.fahrzeugverwaltung.enumKlassen;
 
 public enum Klasse {
 

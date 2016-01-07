@@ -1,6 +1,7 @@
-package de.decoit.fahrzeugverwaltung.Fahrzeug;
+package de.decoit.fahrzeugverwaltung.methodenKlassen;
 
-import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
+import de.decoit.fahrzeugverwaltung.enumKlassen.Treibstoff;
+import de.decoit.fahrzeugverwaltung.KFZ;
 import java.io.Serializable;
 
 public class Treibstoffpreise implements Serializable {

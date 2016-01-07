@@ -1,4 +1,7 @@
-package de.decoit.fahrzeugverwaltung.Fahrzeug;
+package de.decoit.fahrzeugverwaltung.methodenKlassen;
+
+import de.decoit.fahrzeugverwaltung.enumKlassen.Klasse;
+import de.decoit.fahrzeugverwaltung.KFZ;
 
 public class Verschleißwerte {
 
