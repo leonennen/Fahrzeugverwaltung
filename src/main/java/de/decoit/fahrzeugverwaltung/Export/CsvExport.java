@@ -1,7 +1,6 @@
 package de.decoit.fahrzeugverwaltung.Export;
 
 import de.decoit.fahrzeugverwaltung.Export.Abspeichern.CsvName;
-import de.decoit.fahrzeugverwaltung.Export.Ausgabe.AusgabeInterface;
 import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
 import de.decoit.fahrzeugverwaltung.Export.Abspeichern.PfadDatei;
 import java.io.FileOutputStream;
@@ -11,12 +10,15 @@ import java.util.ArrayList;
 public class CsvExport implements ExportInterface {
 
     @Override
-    public void listeExport(String name, AusgabeInterface ausgabe, ArrayList<KFZ> autoListe) {
+    public void listeExport(String name, ArrayList<KFZ> autoListe) {
 
         String export = "";
 
         for (KFZ auto : autoListe) {
-            export = export + ausgabe.autoAusgabe(auto);
+
+            export = export + auto.getBesitzer() + "," + auto.getMarke() + "," + auto.getTyp()
+                    + "," + auto.getKlasse() + "," + auto.getVerbrauch() + "," + auto.getLeistung() + ","
+                    + auto.getKmstand() + "," + auto.getTreibstoff() + "\n";
         }
 
         export = "Besitzer,Marke,Typ,Klasse,Verbrauch,Leistung,Kilometerstand,Treibstoff\n" + export;

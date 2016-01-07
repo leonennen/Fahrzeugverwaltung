@@ -8,11 +8,9 @@ import de.decoit.fahrzeugverwaltung.Fahrzeug.Treibstoffpreise;
 import de.decoit.fahrzeugverwaltung.Fahrzeug.Treibstoff;
 import de.decoit.fahrzeugverwaltung.Export.Abspeichern.Deserializer;
 import de.decoit.fahrzeugverwaltung.Export.Abspeichern.Serializer;
-import de.decoit.fahrzeugverwaltung.Export.Ausgabe.Ausgabe;
-import de.decoit.fahrzeugverwaltung.Export.Ausgabe.AusgabeInterface;
+import de.decoit.fahrzeugverwaltung.Export.Ausgabe;
 import de.decoit.fahrzeugverwaltung.Export.ExportInterface;
 import de.decoit.fahrzeugverwaltung.Export.ExportAuswahl;
-import de.decoit.fahrzeugverwaltung.Export.Ausgabe.AusgabeAuswahl;
 import de.decoit.fahrzeugverwaltung.Export.Datei;
 import java.io.*;
 import java.util.*;
@@ -226,10 +224,9 @@ public class Main {
         System.out.println("Bericht | XML | CSV");
 
         Datei eingabe = Datei.valueOf(user_input.readLine());
-        AusgabeInterface ausgabe = AusgabeAuswahl.auswahl(eingabe);
 
         ExportInterface exportdatei = ExportAuswahl.auswahl(eingabe);
-        exportdatei.listeExport(name, ausgabe, autoListe);
+        exportdatei.listeExport(name, autoListe);
     }
 
     public void spritVerbrauch(Console user_input, ArrayList<KFZ> autoListe, Treibstoffpreise treibstoffpreise) {

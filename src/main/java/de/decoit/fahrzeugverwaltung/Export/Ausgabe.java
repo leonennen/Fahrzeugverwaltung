@@ -1,12 +1,11 @@
-package de.decoit.fahrzeugverwaltung.Export.Ausgabe;
+package de.decoit.fahrzeugverwaltung.Export;
 
 import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
 import de.decoit.fahrzeugverwaltung.Fahrzeug.Klasse;
 import de.decoit.fahrzeugverwaltung.Fahrzeug.Treibstoff;
 
-public class Ausgabe implements AusgabeInterface{
+public class Ausgabe{
 
-    @Override
     public String autoAusgabe(KFZ auto) {
 
         String besitzer = auto.getBesitzer();

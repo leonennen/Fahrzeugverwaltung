@@ -1,7 +1,6 @@
 package de.decoit.fahrzeugverwaltung.Export;
 
 import de.decoit.fahrzeugverwaltung.Export.Abspeichern.BerichtName;
-import de.decoit.fahrzeugverwaltung.Export.Ausgabe.AusgabeInterface;
 import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
 import de.decoit.fahrzeugverwaltung.Export.Abspeichern.PfadDatei;
 import java.io.FileOutputStream;
@@ -11,12 +10,17 @@ import java.util.ArrayList;
 public class BerichtExport implements ExportInterface {
 
     @Override
-    public void listeExport(String name, AusgabeInterface ausgabe, ArrayList<KFZ> autoListe) {
+    public void listeExport(String name, ArrayList<KFZ> autoListe) {
 
         String export = "";
 
         for (KFZ auto : autoListe) {
-            export = export + ausgabe.autoAusgabe(auto);
+
+            export = export + "Kfz: Besitzer: " + auto.getBesitzer() + ", Fahrzeug: "
+                    + auto.getMarke() + " " + auto.getTyp() + ", Klasse: " + auto.getKlasse()
+                    + ", Verbrauch: " + auto.getVerbrauch()
+                    + "l/100km, Leistung: " + auto.getLeistung() + "kW, Kmstand: "
+                    + auto.getKmstand() + "km, Treibstoff: " + auto.getTreibstoff() + "\n";
         }
 
         System.out.println(export);

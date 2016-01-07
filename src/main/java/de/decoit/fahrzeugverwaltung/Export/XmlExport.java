@@ -1,6 +1,5 @@
 package de.decoit.fahrzeugverwaltung.Export;
 
-import de.decoit.fahrzeugverwaltung.Export.Ausgabe.AusgabeInterface;
 import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
 import de.decoit.fahrzeugverwaltung.Export.Abspeichern.PfadDatei;
 import de.decoit.fahrzeugverwaltung.Export.Abspeichern.XmlName;
@@ -11,12 +10,22 @@ import java.util.ArrayList;
 public class XmlExport implements ExportInterface {
 
     @Override
-    public void listeExport(String name, AusgabeInterface ausgabe, ArrayList<KFZ> autoListe) {
+    public void listeExport(String name, ArrayList<KFZ> autoListe) {
 
         String export = "";
 
         for (KFZ auto : autoListe) {
-            export = export + ausgabe.autoAusgabe(auto);
+
+            export = export + "<KFZ>\n"
+                    + "<Besitzer>" + auto.getBesitzer() + "</Besitzer>\n"
+                    + "<Marke>" + auto.getMarke() + "</Marke>\n"
+                    + "<Typ>" + auto.getTyp() + "</Typ>\n"
+                    + "<Klasse>" + auto.getKlasse() + "</Klasse>\n"
+                    + "<Verbrauch>" + auto.getVerbrauch() + "</Verbrauch>\n"
+                    + "<Leistung>" + auto.getLeistung() + "</Leistung>\n"
+                    + "<Kilometerstand>" + auto.getKmstand() + "</Kilometerstand>\n"
+                    + "<Treibstoff>" + auto.getTreibstoff() + "</Treibstoff>\n"
+                    + "</KFZ>\n";
         }
 
         export = "<?xml version=\"1.0\"?>\n"
