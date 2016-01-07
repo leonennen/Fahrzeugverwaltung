@@ -1,11 +1,10 @@
-package de.decoit.fahrzeugverwaltung.Export;
+package de.decoit.fahrzeugverwaltung.Export.Ausgabe;
 
-import de.decoit.fahrzeugverwaltung.KFZ;
-import de.decoit.fahrzeugverwaltung.Klasse;
-import de.decoit.fahrzeugverwaltung.Treibstoff;
-import java.util.ArrayList;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.Klasse;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.Treibstoff;
 
-public class BerichtAusgabe implements AusgabeInterface {
+public class Ausgabe implements AusgabeInterface{
 
     @Override
     public String autoAusgabe(KFZ auto) {
@@ -19,13 +18,11 @@ public class BerichtAusgabe implements AusgabeInterface {
         Treibstoff treibstoff = auto.getTreibstoff();
         Klasse klasse = auto.getKlasse();
 
-        String ausgabe = "Kfz: Besitzer: " + besitzer + ", Fahrzeug: "
+        String ausgabe = "Kfz: |Besitzer: " + besitzer + ", Fahrzeug: "
                 + marke + " " + typ + ", Klasse: " + klasse
-                + ", Verbrauch: " + verbrauch
+                + ", \n     |Verbrauch: " + verbrauch
                 + "l/100km, Leistung: " + leistung + "kW, Kmstand: "
-                + kmstand + "km, Treibstoff: " + treibstoff + "\n";
-
+                + kmstand + "km, Treibstoff: " + treibstoff;
         return ausgabe;
     }
-
 }

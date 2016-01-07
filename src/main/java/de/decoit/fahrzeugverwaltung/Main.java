@@ -1,12 +1,18 @@
 package de.decoit.fahrzeugverwaltung;
 
-import de.decoit.fahrzeugverwaltung.Speichern.Deserializer;
-import de.decoit.fahrzeugverwaltung.Speichern.Serializer;
-import de.decoit.fahrzeugverwaltung.Export.Ausgabe;
-import de.decoit.fahrzeugverwaltung.Export.AusgabeInterface;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.Verschleißwerte;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.Klasse;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.Sparsamkeit;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.Treibstoffpreise;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.Treibstoff;
+import de.decoit.fahrzeugverwaltung.Export.Abspeichern.Deserializer;
+import de.decoit.fahrzeugverwaltung.Export.Abspeichern.Serializer;
+import de.decoit.fahrzeugverwaltung.Export.Ausgabe.Ausgabe;
+import de.decoit.fahrzeugverwaltung.Export.Ausgabe.AusgabeInterface;
 import de.decoit.fahrzeugverwaltung.Export.ExportInterface;
 import de.decoit.fahrzeugverwaltung.Export.ExportAuswahl;
-import de.decoit.fahrzeugverwaltung.Export.AusgabeAuswahl;
+import de.decoit.fahrzeugverwaltung.Export.Ausgabe.AusgabeAuswahl;
 import de.decoit.fahrzeugverwaltung.Export.Datei;
 import java.io.*;
 import java.util.*;

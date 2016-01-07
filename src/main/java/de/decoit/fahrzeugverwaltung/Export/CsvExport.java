@@ -1,7 +1,9 @@
 package de.decoit.fahrzeugverwaltung.Export;
 
-import de.decoit.fahrzeugverwaltung.Helper;
-import de.decoit.fahrzeugverwaltung.KFZ;
+import de.decoit.fahrzeugverwaltung.Export.Abspeichern.CsvName;
+import de.decoit.fahrzeugverwaltung.Export.Ausgabe.AusgabeInterface;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
+import de.decoit.fahrzeugverwaltung.Export.Abspeichern.PfadDatei;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -21,7 +23,10 @@ public class CsvExport implements ExportInterface {
 
         System.out.println(export);
 
-        try (PrintStream out = new PrintStream(new FileOutputStream(Helper.pfadDatei() + name + ".csv"))) {
+        PfadDatei pfad = new PfadDatei();
+        CsvName dateiname = new CsvName();
+
+        try (PrintStream out = new PrintStream(new FileOutputStream(pfad.pfad() + dateiname.dateiname(name)))) {
 
             out.print(export);
 

@@ -1,4 +1,6 @@
-package de.decoit.fahrzeugverwaltung.Export;
+package de.decoit.fahrzeugverwaltung.Export.Ausgabe;
+
+import de.decoit.fahrzeugverwaltung.Export.Datei;
 
 public class AusgabeAuswahl {
 

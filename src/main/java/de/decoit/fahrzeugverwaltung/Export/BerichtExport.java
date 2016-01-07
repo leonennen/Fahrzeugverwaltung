@@ -1,7 +1,9 @@
 package de.decoit.fahrzeugverwaltung.Export;
 
-import de.decoit.fahrzeugverwaltung.Helper;
-import de.decoit.fahrzeugverwaltung.KFZ;
+import de.decoit.fahrzeugverwaltung.Export.Abspeichern.BerichtName;
+import de.decoit.fahrzeugverwaltung.Export.Ausgabe.AusgabeInterface;
+import de.decoit.fahrzeugverwaltung.Fahrzeug.KFZ;
+import de.decoit.fahrzeugverwaltung.Export.Abspeichern.PfadDatei;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -19,7 +21,10 @@ public class BerichtExport implements ExportInterface {
 
         System.out.println(export);
 
-        try (PrintStream out = new PrintStream(new FileOutputStream(Helper.pfadDatei() + name + ".txt"))) {
+        PfadDatei pfad = new PfadDatei();
+        BerichtName dateiname = new BerichtName();
+
+        try (PrintStream out = new PrintStream(new FileOutputStream(pfad.pfad() + dateiname.dateiname(name)))) {
 
             out.print(export);
 
