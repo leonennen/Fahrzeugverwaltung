@@ -29,7 +29,7 @@ public class Main {
 
         do {
 
-            System.out.println("---------------------------------------------");
+            System.out.println("-------------L--------------------------------");
             System.out.println("| FAHRZEUGVERWALTUNG:                       |");
             System.out.println("---------------------------------------------");
             System.out.println("| Neues Fahrzeug hinzufügen:          (01)  |");
