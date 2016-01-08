@@ -129,7 +129,7 @@ public class Main {
         System.out.println("---------------------------------------------------------------------------------");
         System.out.println(new Ausgabe().autoAusgabe(auto));
         System.out.println("---------------------------------------------------------------------------------");
-    }                                               //fertig
+    }
 
     public void bearbeitenFahrzeug(Console user_input, ArrayList<KFZ> autoListe) {
 
@@ -172,7 +172,7 @@ public class Main {
 
         speichernFahrzeug(autoListe);
 
-    }                                          //fertig
+    }
 
     public KFZ abfrageFahrzeug(Console user_input, ArrayList<KFZ> autoListe) {
 
@@ -272,7 +272,7 @@ public class Main {
 
         return auto;
 
-    }                                              //fertig
+    }
 
     public void löschenFahrzeug(Console user_input, ArrayList<KFZ> autoListe) {
 
@@ -296,7 +296,7 @@ public class Main {
                 System.out.println(ex.getMessage());
             }
         } while (i == 0);
-    }                                             //fertig
+    }
 
     public void anzeigenFahrzeug(Console user_input, ArrayList<KFZ> autoListe) {
 
@@ -320,7 +320,7 @@ public class Main {
                 System.out.println(ex.getMessage());
             }
         } while (anzeigen == 0);
-    }                                            //fertig
+    }
 
     public void preiseÄndern(Console user_input, Treibstoffpreise treibstoffpreise) {
 
@@ -361,7 +361,7 @@ public class Main {
         treibstoffpreise = new Treibstoffpreise(neudieselpreis, neubenzinpreis);
 
         speichernPreise(treibstoffpreise);
-    }                                       //fertig
+    }
 
     public void liste(ArrayList<KFZ> autoListe) {
 
@@ -375,7 +375,7 @@ public class Main {
             i++;
         }
         System.out.println("---------------------------------------------------------------------------------");
-    }                                                                           //fertig
+    }
 
     public void exportieren(Console user_input, ArrayList<KFZ> autoListe) {
 
@@ -399,7 +399,7 @@ public class Main {
         ExportInterface exportdatei = ExportAuswahl.auswahl(eingabe);
         exportdatei.listeExport(name, autoListe);
 
-    }                                                 //fertig
+    }
 
     public void spritVerbrauch(Console user_input, ArrayList<KFZ> autoListe, Treibstoffpreise treibstoffpreise) {
 
@@ -444,12 +444,27 @@ public class Main {
                 "Für eine Strecke von " + strecke + "km, betragen die Kosten " + kosten + "€.");
         System.out.println(
                 "---------------------------------------------------------------------------------");
-    }           //fertig
+    }
 
     public void sparsamstesFahrzeug(Console user_input, ArrayList<KFZ> autoListe, Treibstoffpreise treibstoffpreise) {
 
         System.out.println("Für welche Strecke in Kilometern?");
-        int strecke = Integer.parseInt(user_input.readLine());
+        int strecke = 0;
+        do {
+            try {
+
+                strecke = Integer.parseInt(user_input.readLine());
+
+                if (strecke <= 0) {
+                    strecke = 0;
+                    throw new IllegalStateException("Bitte eine Strecke größer 0 eingeben!");
+                }
+
+            } catch (Exception ex) {
+                System.out.println("Keine gültige Zahl!");
+                System.out.println(ex.getMessage());
+            }
+        } while (strecke == 0);
 
         KFZ auto = Sparsamkeit.sparsamkeit(autoListe, treibstoffpreise, strecke);
         double preis = treibstoffpreise.preis(auto);
@@ -474,5 +489,4 @@ public class Main {
         Serializer serializer = new Serializer();
         serializer.serializeTreibstoffpreise(treibstoffpreise);
     }
-
 }
