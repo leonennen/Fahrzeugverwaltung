@@ -64,26 +64,7 @@ public class Main {
             } else if (input.equals("3")) {                                                 //Fahrzeug Anzeigen
 
                 liste(autoListe);
-                int i = 0;
-                do {
-                    try {
-                        System.out.println("Welches Fahrzeug?");
-                        int anzeigen = Integer.parseInt(user_input.readLine());
-
-                        if (anzeigen < 1 || anzeigen > autoListe.size()) {
-                            throw new IllegalStateException("Kein Fahrzeug an dieser Position auf der Liste!");
-                        }
-
-                        KFZ auto = autoListe.get(anzeigen - 1);
-                        System.out.println(new Ausgabe().autoAusgabe(auto));
-                        i = 1;
-                        user_input.readLine();
-
-                    } catch (Exception ex) {
-                        System.out.println("Keine gültige Zahl!");
-                        System.out.println(ex.getMessage());
-                    }
-                } while (i == 0);
+                anzeigenFahrzeug(user_input, autoListe);
 
             } else if (input.equals("4")) {                                                 //Fahrzeug bearbeiten
 
@@ -92,28 +73,8 @@ public class Main {
 
             } else if (input.equals("5")) {                                                 //Fahrzeug löschen
 
-                int i = 0;
                 liste(autoListe);
-                do {
-                    try {
-                        System.out.println("Welches Fahrzeug von der Liste?");
-                        int loeschen = Integer.parseInt(user_input.readLine());
-
-                        if (loeschen < 1 || loeschen > autoListe.size()) {
-                            throw new IllegalStateException("Kein Fahrzeug an dieser Position auf der Liste!");
-                        }
-
-                        autoListe.remove(loeschen - 1);
-                        System.out.println(loeschen + ". Fahrzeug gelöscht!");
-                        i = 1;
-                        Serializer serializer = new Serializer();
-                        serializer.serializeAuto(autoListe);
-
-                    } catch (Exception ex) {
-                        System.out.println("Keine gültige Zahl!");
-                        System.out.println(ex.getMessage());
-                    }
-                } while (i == 0);
+                löschenFahrzeug(user_input, autoListe);
 
             } else if (input.equals("6")) {                                                 //Treibstoffpreise anzeigen
 
@@ -122,16 +83,7 @@ public class Main {
 
             } else if (input.equals("7")) {                                                 //Treibstoffpreise ändern
 
-                System.out.println("Dieselpreis in €:");
-                double neudieselpreis = Double.parseDouble(user_input.readLine());
-
-                System.out.println("Benzinpreis in €:");
-                double neubenzinpreis = Double.parseDouble(user_input.readLine());
-
-                treibstoffpreise = new Treibstoffpreise(neudieselpreis, neubenzinpreis);
-
-                Serializer serializer = new Serializer();                                   //nach dem Ändern speichern
-                serializer.serializeTreibstoffpreise(treibstoffpreise);
+                preiseÄndern(user_input, treibstoffpreise);
 
             } else if (input.equals("8")) {                                                 //Verbrauch für bestimmtes Auto berechnen
 
@@ -152,10 +104,8 @@ public class Main {
 
             } else if (input.equals("11")) {                                                 //Beenden
 
-                Serializer serializer = new Serializer();
-                serializer.serializeAuto(autoListe);
-                serializer.serializeTreibstoffpreise(treibstoffpreise);
-
+                speichernFahrzeug(autoListe);
+                speichernPreise(treibstoffpreise);
                 System.out.println("Wird beendet!");
                 System.exit(0);
 
@@ -174,13 +124,12 @@ public class Main {
         KFZ auto = abfrageFahrzeug(user_input, autoListe);
         autoListe.add(auto);
 
-        Serializer serializer = new Serializer();
-        serializer.serializeAuto(autoListe);
+        speichernFahrzeug(autoListe);
 
         System.out.println("---------------------------------------------------------------------------------");
         System.out.println(new Ausgabe().autoAusgabe(auto));
         System.out.println("---------------------------------------------------------------------------------");
-    }
+    }                                               //fertig
 
     public void bearbeitenFahrzeug(Console user_input, ArrayList<KFZ> autoListe) {
 
@@ -191,7 +140,7 @@ public class Main {
                 bearbeiten = Integer.parseInt(user_input.readLine());
 
                 if (bearbeiten < 1 || bearbeiten > autoListe.size()) {
-                    System.out.println("Kein Fahrzeug an dieser Position auf der Liste!");
+                    System.out.println("Kein Fahrzeug an dieser Position in der Liste!");
                     bearbeiten = 0;
                 }
 
@@ -201,16 +150,29 @@ public class Main {
             }
         } while (bearbeiten == 0);
 
-        KFZ auto = abfrageFahrzeug(user_input, autoListe);
-        autoListe.set(bearbeiten - 1, auto);
+        KFZ auto = autoListe.get(bearbeiten - 1);
+        System.out.println(new Ausgabe().autoAusgabe(auto));
+
+        int i = 0;
+        do {
+            try {
+                auto = abfrageFahrzeug(user_input, autoListe);
+                autoListe.set(bearbeiten - 1, auto);
+                i = 1;
+
+            } catch (Exception ex) {
+                System.out.println("Konnte nicht bearbeitet werden, bitte versuchen sie es erneut!");
+                System.out.println(ex.getMessage());
+            }
+
+        } while (i == 0);
 
         System.out.print(bearbeiten + ". Fahrzeug bearbeitet!");
         System.out.println(new Ausgabe().autoAusgabe(auto));
 
-        Serializer serializer = new Serializer();
-        serializer.serializeAuto(autoListe);
+        speichernFahrzeug(autoListe);
 
-    }
+    }                                          //fertig
 
     public KFZ abfrageFahrzeug(Console user_input, ArrayList<KFZ> autoListe) {
 
@@ -233,9 +195,9 @@ public class Main {
                 System.out.println("Kleinwagen|Mittelklasse|Oberklasse|Transporter");
                 neuklasse = Klasse.valueOf(user_input.readLine());
 
-            } catch (IllegalArgumentException exklasse) {
+            } catch (IllegalArgumentException ex) {
                 System.out.println("Keine gültige Fahrzeugklasse!");
-                System.out.println(exklasse.getMessage());
+                System.out.println(ex.getMessage());
             }
         } while (neuklasse == null);
 
@@ -250,10 +212,10 @@ public class Main {
                     System.out.println("Bitte geben Sie einen positiven Wert ein.");
                     neuverbrauch = 0;
                 }
-            } catch (NumberFormatException exverbrauch) {
+            } catch (NumberFormatException ex) {
                 System.out.println("Kein gültiger Verbrauchswert!");
                 System.out.println("Bitte geben Sie eine Zahl ein.");
-                System.out.println(exverbrauch.getMessage());
+                System.out.println(ex.getMessage());
             }
         } while (neuverbrauch == 0);
 
@@ -268,10 +230,10 @@ public class Main {
                     System.out.println("Bitte geben Sie einen positiven Wert ein.");
                     neuleistung = 0;
                 }
-            } catch (NumberFormatException exleistung) {
+            } catch (NumberFormatException ex) {
                 System.out.println("Kein gültiger Leistungswert!");
                 System.out.println("Bitte geben Sie eine Zahl ein.");
-                System.out.println(exleistung.getMessage());
+                System.out.println(ex.getMessage());
             }
         } while (neuleistung == 0);
 
@@ -286,10 +248,10 @@ public class Main {
                     System.out.println("Bitte geben Sie einen positiven Wert ein.");
                     neukmstand = 0;
                 }
-            } catch (NumberFormatException exkmstand) {
+            } catch (NumberFormatException ex) {
                 System.out.println("Kein gültiger Kilometerstand!");
                 System.out.println("Bitte geben Sie eine Zahl ein.");
-                System.out.println(exkmstand.getMessage());
+                System.out.println(ex.getMessage());
             }
         } while (neukmstand == 0);
 
@@ -300,9 +262,9 @@ public class Main {
                 System.out.println("Benzin | Diesel");
                 neutreibstoff = Treibstoff.valueOf(user_input.readLine());
 
-            } catch (IllegalArgumentException extreibstoff) {
+            } catch (IllegalArgumentException ex) {
                 System.out.println("Kein gültiger Treibstoff!");
-                System.out.println(extreibstoff.getMessage());
+                System.out.println(ex.getMessage());
             }
         } while (neutreibstoff == null);
 
@@ -310,7 +272,96 @@ public class Main {
 
         return auto;
 
-    }       //fertig
+    }                                              //fertig
+
+    public void löschenFahrzeug(Console user_input, ArrayList<KFZ> autoListe) {
+
+        int i = 0;
+        do {
+            try {
+                System.out.println("Welches Fahrzeug von der Liste?");
+                int loeschen = Integer.parseInt(user_input.readLine());
+
+                if (loeschen < 1 || loeschen > autoListe.size()) {
+                    throw new IllegalStateException("Kein Fahrzeug an dieser Position auf der Liste!");
+                }
+
+                autoListe.remove(loeschen - 1);
+                System.out.println(loeschen + ". Fahrzeug gelöscht!");
+                i = 1;
+                speichernFahrzeug(autoListe);
+
+            } catch (Exception ex) {
+                System.out.println("Keine gültige Zahl!");
+                System.out.println(ex.getMessage());
+            }
+        } while (i == 0);
+    }                                             //fertig
+
+    public void anzeigenFahrzeug(Console user_input, ArrayList<KFZ> autoListe) {
+
+        int anzeigen = 0;
+        do {
+            try {
+                System.out.println("Welches Fahrzeug?");
+                anzeigen = Integer.parseInt(user_input.readLine());
+
+                if (anzeigen < 1 || anzeigen > autoListe.size()) {
+                    anzeigen = 0;
+                    throw new IllegalStateException("Kein Fahrzeug an dieser Position auf der Liste!");
+                }
+
+                KFZ auto = autoListe.get(anzeigen - 1);
+                System.out.println(new Ausgabe().autoAusgabe(auto));
+                user_input.readLine();
+
+            } catch (Exception ex) {
+                System.out.println("Keine gültige Zahl!");
+                System.out.println(ex.getMessage());
+            }
+        } while (anzeigen == 0);
+    }                                            //fertig
+
+    public void preiseÄndern(Console user_input, Treibstoffpreise treibstoffpreise) {
+
+        double neudieselpreis = 0;
+        do {
+            try {
+                System.out.println("Dieselpreis in €:");
+                neudieselpreis = Double.parseDouble(user_input.readLine());
+                if (neudieselpreis <= 0) {
+                    neudieselpreis = 0;
+                    throw new IllegalStateException("Dieselpreis kann nicht kleiner gleich 0 sein");
+                }
+            } catch (NumberFormatException ex) {
+                System.out.println("Bitte geben Sie eine gültige Zahl ein.");
+                System.out.println(ex.getMessage());
+            } catch (IllegalStateException ex) {
+                System.out.println(ex.getMessage());
+            }
+        } while (neudieselpreis == 0);
+
+        double neubenzinpreis = 0;
+        do {
+            try {
+                System.out.println("Benzinpreis in €:");
+                neubenzinpreis = Double.parseDouble(user_input.readLine());
+                if (neubenzinpreis <= 0) {
+                    neubenzinpreis = 0;
+                    throw new IllegalStateException("Benzinpreis kann nicht kleiner gleich 0 sein");
+                }
+            } catch (NumberFormatException ex) {
+                System.out.println("Bitte geben Sie eine gültige Zahl ein.");
+                System.out.println(ex.getMessage());
+            } catch (IllegalStateException ex) {
+                System.out.println(ex.getMessage());
+            }
+        } while (neubenzinpreis == 0);
+
+        treibstoffpreise = new Treibstoffpreise(neudieselpreis, neubenzinpreis);
+
+        speichernPreise(treibstoffpreise);
+    }                                       //fertig
 
     public void liste(ArrayList<KFZ> autoListe) {
 
@@ -324,37 +375,76 @@ public class Main {
             i++;
         }
         System.out.println("---------------------------------------------------------------------------------");
-    }                                    // fertig
+    }                                                                           //fertig
 
     public void exportieren(Console user_input, ArrayList<KFZ> autoListe) {
 
         System.out.println("Dateinamen wählen:");
         String name = user_input.readLine();
 
-        System.out.println("Dateiormat wählen:");
-        System.out.println("Bericht | XML | CSV");
+        Datei eingabe = null;
+        do {
+            try {
+                System.out.println("Dateiormat wählen:");
+                System.out.println("Bericht | XML | CSV");
 
-        Datei eingabe = Datei.valueOf(user_input.readLine());
+                eingabe = Datei.valueOf(user_input.readLine());
+
+            } catch (IllegalArgumentException ex) {
+                System.out.println("Kein gültiges Dateiformat!");
+                System.out.println(ex.getMessage());
+            }
+        } while (eingabe == null);
 
         ExportInterface exportdatei = ExportAuswahl.auswahl(eingabe);
         exportdatei.listeExport(name, autoListe);
-    }
+
+    }                                                 //fertig
 
     public void spritVerbrauch(Console user_input, ArrayList<KFZ> autoListe, Treibstoffpreise treibstoffpreise) {
 
         System.out.println("Für welches Fahrzeug?");
-        KFZ auto = autoListe.get(Integer.parseInt(user_input.readLine()) - 1);
 
-        System.out.println("Für welche Strecke in Kilometern?");
+        KFZ auto = null;
+        int input = 0;
+        do {
+            try {
+                input = Integer.parseInt(user_input.readLine());
+
+                if (input < 1 || input > autoListe.size()) {
+                    input = 0;
+                    throw new IllegalStateException("Kein Fahrzeug an dieser Position auf der Liste!");
+                }
+                input = 1;
+
+            } catch (Exception ex) {
+                System.out.println("Keine gültige Zahl!");
+                System.out.println(ex.getMessage());
+            }
+
+        } while (input == 0);
+        do {
+            try {
+                auto = autoListe.get(input - 1);
+            } catch (IndexOutOfBoundsException ex) {
+                System.out.println(ex.getMessage());
+            }
+        } while (auto == null);
+
+        System.out.println(
+                "Für welche Strecke in Kilometern?");
         int strecke = Integer.parseInt(user_input.readLine());
 
         double preis = treibstoffpreise.preis(auto);
         double kosten = auto.kosten(strecke + Verschleißwerte.verschleiß(auto, strecke), preis);
 
-        System.out.println("---------------------------------------------------------------------------------");
-        System.out.println("Für eine Strecke von " + strecke + "km, betragen die Kosten " + kosten + "€.");
-        System.out.println("---------------------------------------------------------------------------------");
-    }
+        System.out.println(
+                "---------------------------------------------------------------------------------");
+        System.out.println(
+                "Für eine Strecke von " + strecke + "km, betragen die Kosten " + kosten + "€.");
+        System.out.println(
+                "---------------------------------------------------------------------------------");
+    }           //fertig
 
     public void sparsamstesFahrzeug(Console user_input, ArrayList<KFZ> autoListe, Treibstoffpreise treibstoffpreise) {
 
@@ -371,6 +461,18 @@ public class Main {
         System.out.println("es entstehen Kosten in Höhe von " + kosten + "€.");
         System.out.println(new Ausgabe().autoAusgabe(auto));
         System.out.println("---------------------------------------------------------------------------------");
+    }
+
+    public void speichernFahrzeug(ArrayList<KFZ> autoListe) {
+
+        Serializer serializer = new Serializer();
+        serializer.serializeAuto(autoListe);
+    }
+
+    public void speichernPreise(Treibstoffpreise treibstoffpreise) {
+
+        Serializer serializer = new Serializer();
+        serializer.serializeTreibstoffpreise(treibstoffpreise);
     }
 
 }
