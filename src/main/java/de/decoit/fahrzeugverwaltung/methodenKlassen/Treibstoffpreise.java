@@ -1,7 +1,7 @@
 package de.decoit.fahrzeugverwaltung.methodenKlassen;
 
-import de.decoit.fahrzeugverwaltung.enumKlassen.Treibstoff;
 import de.decoit.fahrzeugverwaltung.KFZ;
+import de.decoit.fahrzeugverwaltung.enumKlassen.Treibstoff;
 import java.io.Serializable;
 
 public class Treibstoffpreise implements Serializable {
@@ -15,18 +15,24 @@ public class Treibstoffpreise implements Serializable {
     }
 
     public double preis(KFZ auto) {
+        
         double preis = 0;
         Treibstoff treibstoff = auto.getTreibstoff();
-
-        switch (treibstoff) {
-            case Diesel:
-                preis = dieselpreis;
-                break;
-            case Benzin:
-                preis = benzinpreis;
-                break;
-            default:
-                throw new IllegalStateException("Undefinierter Treibstofftp!");
+        
+        try {
+            switch (treibstoff) {
+                case Diesel:
+                    preis = dieselpreis;
+                    break;
+                case Benzin:
+                    preis = benzinpreis;
+                    break;
+                default:
+                    throw new IllegalStateException("Undefinierter Treibstofftyp!");
+            }
+        } catch (IllegalStateException ex) {
+            
+            System.out.println(ex.getMessage());
         }
         return preis;
     }
