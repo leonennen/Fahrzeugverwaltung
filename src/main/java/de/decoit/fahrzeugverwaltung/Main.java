@@ -12,6 +12,7 @@ import de.decoit.fahrzeugverwaltung.methodenKlassen.Sparsamkeit;
 import de.decoit.fahrzeugverwaltung.methodenKlassen.Treibstoffpreise;
 import de.decoit.fahrzeugverwaltung.methodenKlassen.Verschleißwerte;
 import java.io.*;
+import java.sql.*;
 import java.util.*;
 
 public class Main {
@@ -366,14 +367,14 @@ public class Main {
     public void liste(ArrayList<KFZ> autoListe) {
 
         System.out.println("--------------------------------------------------------------------------------");
-
-        int i = 1;
-        for (KFZ o : autoListe) {
-
-            System.out.print(i + ". ");
-            System.out.println(new Ausgabe().autoAusgabe(o));
-            i++;
-        }
+        datenBank();
+        //        int i = 1;
+        //        for (KFZ o : autoListe) {
+        //
+        //            System.out.print(i + ". ");
+        //            System.out.println(new Ausgabe().autoAusgabe(o));
+        //            i++;
+        //        }
         System.out.println("--------------------------------------------------------------------------------");
     }
 
@@ -489,4 +490,27 @@ public class Main {
         Serializer serializer = new Serializer();
         serializer.serializeTreibstoffpreise(treibstoffpreise);
     }
+
+    public void datenBank() {
+
+        try {
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+        } catch (ClassNotFoundException e) {
+            System.out.println(e);
+        }
+        try {
+            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Fahrzeugverwaltung", "kfz", "kfz");
+            Statement stmt = con.createStatement();
+
+            ResultSet rs = stmt.executeQuery("SELECT * FROM KFZ.Fahrzeuge");
+
+            while (rs.next()) {
+                String s = rs.getString("Besitzer");
+                System.out.println(s);
+            }
+        } catch (SQLException e) {
+            System.err.println(e);
+        }
+    }
+
 }
