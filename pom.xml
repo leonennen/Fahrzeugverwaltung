@@ -46,4 +46,11 @@
             </plugin>
         </plugins>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbyclient</artifactId>
+            <version>10.12.1.1</version>
+        </dependency>
+    </dependencies>
 </project>
