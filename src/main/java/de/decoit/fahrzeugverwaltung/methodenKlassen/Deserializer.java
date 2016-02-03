@@ -1,8 +1,8 @@
 package de.decoit.fahrzeugverwaltung.methodenKlassen;
 
+import de.decoit.fahrzeugverwaltung.KFZ;
 import de.decoit.fahrzeugverwaltung.subKlassen.PfadAuto;
 import de.decoit.fahrzeugverwaltung.subKlassen.PfadPreise;
-import de.decoit.fahrzeugverwaltung.KFZ;
 import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,12 +32,12 @@ public class Deserializer {
 
         } catch (Exception ex) {
 
-            System.out.println("---------------------------------------------------------------------------------");
+            System.out.println("--------------------------------------------------------------------------------");
             System.out.println("Fehler beim lesen der Datei: " + ex.getMessage());
-            System.out.println("---------------------------------------------------------------------------------");
+            System.out.println("--------------------------------------------------------------------------------");
         }
 
-        System.out.println("---------------------------------------------------------------------------------");
+        System.out.println("--------------------------------------------------------------------------------");
         System.out.println("Datei geladen mit " + autoListe.size() + " Elementen!");
 
         return autoListe;
@@ -60,12 +60,12 @@ public class Deserializer {
 
         } catch (Exception ex) {
 
-            System.out.println("---------------------------------------------------------------------------------");
+            System.out.println("--------------------------------------------------------------------------------");
             System.out.println("Fehler beim lesen der Datei: " + ex.getMessage());
-            System.out.println("---------------------------------------------------------------------------------");
+            System.out.println("--------------------------------------------------------------------------------");
         }
 
-        System.out.println("---------------------------------------------------------------------------------");
+        System.out.println("--------------------------------------------------------------------------------");
         System.out.println("Treibstoffpreise geladen!");
 
         return treibstoffpreise;
