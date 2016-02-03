@@ -5,6 +5,7 @@ import de.decoit.fahrzeugverwaltung.enumKlassen.Klasse;
 import de.decoit.fahrzeugverwaltung.enumKlassen.Treibstoff;
 import de.decoit.fahrzeugverwaltung.interfaceKlassen.ExportInterface;
 import de.decoit.fahrzeugverwaltung.methodenKlassen.Ausgabe;
+import de.decoit.fahrzeugverwaltung.methodenKlassen.Datenbank;
 import de.decoit.fahrzeugverwaltung.methodenKlassen.Deserializer;
 import de.decoit.fahrzeugverwaltung.methodenKlassen.ExportAuswahl;
 import de.decoit.fahrzeugverwaltung.methodenKlassen.Serializer;
@@ -124,6 +125,9 @@ public class Main {
 
         KFZ auto = abfrageFahrzeug(user_input, autoListe);
         autoListe.add(auto);
+        
+        Datenbank datenbank = new Datenbank();
+        datenbank.neuSchreiben(auto);
 
         speichernFahrzeug(autoListe);
 
