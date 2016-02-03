@@ -119,16 +119,16 @@ public class Main {
 
     public void neuesFahrzeug(Console user_input, ArrayList<KFZ> autoListe) {
 
-        System.out.println("---------------------------------------------------------------------------------");
+        System.out.println("--------------------------------------------------------------------------------");
 
         KFZ auto = abfrageFahrzeug(user_input, autoListe);
         autoListe.add(auto);
 
         speichernFahrzeug(autoListe);
 
-        System.out.println("---------------------------------------------------------------------------------");
+        System.out.println("--------------------------------------------------------------------------------");
         System.out.println(new Ausgabe().autoAusgabe(auto));
-        System.out.println("---------------------------------------------------------------------------------");
+        System.out.println("--------------------------------------------------------------------------------");
     }
 
     public void bearbeitenFahrzeug(Console user_input, ArrayList<KFZ> autoListe) {
@@ -365,7 +365,7 @@ public class Main {
 
     public void liste(ArrayList<KFZ> autoListe) {
 
-        System.out.println("---------------------------------------------------------------------------------");
+        System.out.println("--------------------------------------------------------------------------------");
 
         int i = 1;
         for (KFZ o : autoListe) {
@@ -374,7 +374,7 @@ public class Main {
             System.out.println(new Ausgabe().autoAusgabe(o));
             i++;
         }
-        System.out.println("---------------------------------------------------------------------------------");
+        System.out.println("--------------------------------------------------------------------------------");
     }
 
     public void exportieren(Console user_input, ArrayList<KFZ> autoListe) {
@@ -439,11 +439,11 @@ public class Main {
         double kosten = auto.kosten(strecke + Verschleißwerte.verschleiß(auto, strecke), preis);
 
         System.out.println(
-                "---------------------------------------------------------------------------------");
+                "--------------------------------------------------------------------------------");
         System.out.println(
                 "Für eine Strecke von " + strecke + "km, betragen die Kosten " + kosten + "€.");
         System.out.println(
-                "---------------------------------------------------------------------------------");
+                "--------------------------------------------------------------------------------");
     }
 
     public void sparsamstesFahrzeug(Console user_input, ArrayList<KFZ> autoListe, Treibstoffpreise treibstoffpreise) {
@@ -470,12 +470,12 @@ public class Main {
         double preis = treibstoffpreise.preis(auto);
         double kosten = auto.kosten(strecke + Verschleißwerte.verschleiß(auto, strecke), preis);
 
-        System.out.println("---------------------------------------------------------------------------------");
+        System.out.println("--------------------------------------------------------------------------------");
         System.out.println("Das günstigste Auto für eine Strecke von " + strecke + "km,");
         System.out.println("ist der Wagen von " + auto.getBesitzer() + ", ");
         System.out.println("es entstehen Kosten in Höhe von " + kosten + "€.");
         System.out.println(new Ausgabe().autoAusgabe(auto));
-        System.out.println("---------------------------------------------------------------------------------");
+        System.out.println("--------------------------------------------------------------------------------");
     }
 
     public void speichernFahrzeug(ArrayList<KFZ> autoListe) {
