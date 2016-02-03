@@ -1,8 +1,8 @@
 package de.decoit.fahrzeugverwaltung.methodenKlassen;
 
+import de.decoit.fahrzeugverwaltung.KFZ;
 import de.decoit.fahrzeugverwaltung.subKlassen.PfadAuto;
 import de.decoit.fahrzeugverwaltung.subKlassen.PfadPreise;
-import de.decoit.fahrzeugverwaltung.KFZ;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -29,9 +29,9 @@ public class Serializer {
 
         } catch (Exception ex) {
 
-            System.out.println("---------------------------------------------------------------------------------");
+            System.out.println("--------------------------------------------------------------------------------");
             System.out.println("Fehler beim schreiben der Datei: " + ex.getMessage());
-            System.out.println("---------------------------------------------------------------------------------");
+            System.out.println("--------------------------------------------------------------------------------");
         }
     }
 
@@ -50,9 +50,9 @@ public class Serializer {
 
         } catch (Exception ex) {
 
-            System.out.println("---------------------------------------------------------------------------------");
+            System.out.println("--------------------------------------------------------------------------------");
             System.out.println("Fehler beim schreiben der Datei: " + ex.getMessage());
-            System.out.println("---------------------------------------------------------------------------------");
+            System.out.println("--------------------------------------------------------------------------------");
         }
     }
 
