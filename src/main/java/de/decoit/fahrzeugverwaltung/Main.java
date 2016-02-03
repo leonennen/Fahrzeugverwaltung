@@ -367,14 +367,13 @@ public class Main {
     public void liste(ArrayList<KFZ> autoListe) {
 
         System.out.println("--------------------------------------------------------------------------------");
-        datenBank();
-        //        int i = 1;
-        //        for (KFZ o : autoListe) {
-        //
-        //            System.out.print(i + ". ");
-        //            System.out.println(new Ausgabe().autoAusgabe(o));
-        //            i++;
-        //        }
+        int i = 1;
+        for (KFZ o : autoListe) {
+
+            System.out.print(i + ". ");
+            System.out.println(new Ausgabe().autoAusgabe(o));
+            i++;
+        }
         System.out.println("--------------------------------------------------------------------------------");
     }
 
@@ -493,11 +492,6 @@ public class Main {
 
     public void datenBank() {
 
-        try {
-            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-        } catch (ClassNotFoundException e) {
-            System.out.println(e);
-        }
         try {
             Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Fahrzeugverwaltung", "kfz", "kfz");
             Statement stmt = con.createStatement();
