@@ -77,7 +77,21 @@ public class Main {
 
             } else if (input.equals("4")) {                                                 //Fahrzeug bearbeiten
 
-//                bearbeitenFahrzeug(user_input, autoListe);
+                listeDatenbank();
+
+                try {
+                    System.out.println("FahrzeugID?");
+                    int id = Integer.parseInt(user_input.readLine());
+                    anzeigenFahrzeugDatenbank(id);
+                    bearbeitenFahrzeugDatenbank(user_input, id);
+                    anzeigenFahrzeugDatenbank(id);
+                    user_input.readLine();
+
+                } catch (Exception ex) {
+                    System.out.println("Keine gültige FahrzeugID!");
+                    System.out.println(ex.getMessage());
+                }
+
             } else if (input.equals("5")) {                                                 //Fahrzeug löschen
 
                 listeDatenbank();
@@ -133,48 +147,31 @@ public class Main {
         } while (true);
     }
 
-//    public void bearbeitenFahrzeug(Console user_input, ArrayList<KFZ> autoListe) {
-//
-//        int bearbeiten = 0;
-//        do {
-//            try {
-//                System.out.println("Welches Fahrzeug?");
-//                bearbeiten = Integer.parseInt(user_input.readLine());
-//
-//                if (bearbeiten < 1 || bearbeiten > autoListe.size()) {
-//                    System.out.println("Kein Fahrzeug an dieser Position in der Liste!");
-//                    bearbeiten = 0;
-//                }
-//
-//            } catch (NumberFormatException ex) {
-//                System.out.println("Keine gültige Zahl!");
-//                System.out.println(ex.getMessage());
-//            }
-//        } while (bearbeiten == 0);
-//
-//        KFZ auto = autoListe.get(bearbeiten - 1);
-//        System.out.println(new Ausgabe().autoAusgabe(auto));
-//
-//        int i = 0;
-//        do {
-//            try {
-//                auto = abfrageFahrzeug(user_input, autoListe);
-//                autoListe.set(bearbeiten - 1, auto);
-//                i = 1;
-//
-//            } catch (Exception ex) {
-//                System.out.println("Konnte nicht bearbeitet werden, bitte versuchen sie es erneut!");
-//                System.out.println(ex.getMessage());
-//            }
-//
-//        } while (i == 0);
-//
-//        System.out.print(bearbeiten + ". Fahrzeug bearbeitet!");
-//        System.out.println(new Ausgabe().autoAusgabe(auto));
-//
-//        speichernFahrzeug(autoListe);
-//
-//    }
+    public void listeDatenbank() {
+        try {
+            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Fahrzeugverwaltung", "kfz", "kfz");
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge");
+
+            while (rs.next()) {
+                int id = rs.getInt("FahrzeugID");
+                String besitzer = rs.getString("Besitzer");
+                String marke = rs.getString("Marke");
+                String typ = rs.getString("Typ");
+                int klasse = rs.getInt("Klasse");
+
+                System.out.println("ID: " + id + ", Besitzer: " + besitzer + ", Fahrzeug: "
+                        + marke + " " + typ + ", Klasse: " + klasse);
+
+            }
+            rs.close();
+            stmt.close();
+
+        } catch (SQLException e) {
+            System.err.println(e);
+        }
+    }
+
     public int neuesFahrzeugDatenbank(Console user_input) {
 
         int id = 0;
@@ -296,7 +293,7 @@ public class Main {
             } while (neutreibstoff == 0);
 
             stmt = con.createStatement();
-            stmt.executeUpdate("INSERT INTO Fahrzeuge " + "VALUES (" + id + ",'"
+            stmt.executeUpdate("INSERT INTO Fahrzeuge VALUES (" + id + ",'"
                     + neubesitzer + "', '" + neumarke + "', '" + neutyp + "', "
                     + neuverbrauch + ", " + neuleistung + ", "
                     + neukmstand + ", " + neutreibstoff + ", " + neuklasse + ")");
@@ -310,31 +307,6 @@ public class Main {
             System.err.println(e);
         }
         return id;
-    }
-
-    public void listeDatenbank() {
-        try {
-            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Fahrzeugverwaltung", "kfz", "kfz");
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge");
-
-            while (rs.next()) {
-                int id = rs.getInt("FahrzeugID");
-                String besitzer = rs.getString("Besitzer");
-                String marke = rs.getString("Marke");
-                String typ = rs.getString("Typ");
-                int klasse = rs.getInt("Klasse");
-
-                System.out.println("ID: " + id + ", Besitzer: " + besitzer + ", Fahrzeug: "
-                        + marke + " " + typ + ", Klasse: " + klasse);
-
-            }
-            rs.close();
-            stmt.close();
-
-        } catch (SQLException e) {
-            System.err.println(e);
-        }
     }
 
     public void anzeigenFahrzeugDatenbank(int id) {
@@ -360,6 +332,137 @@ public class Main {
                     + ", \nVerbrauch: " + verbrauch
                     + "l/100km, Leistung: " + leistung + "kW, Kmstand: "
                     + kmstand + "km, Treibstoff: " + treibstoff);
+
+        } catch (SQLException e) {
+            System.err.println(e);
+        }
+    }
+
+    public void bearbeitenFahrzeugDatenbank(Console user_input, int id) {
+
+        try {
+            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Fahrzeugverwaltung", "kfz", "kfz");
+            Statement stmt;
+            ResultSet rs;
+
+            System.out.println("Besitzer des Fahrzeugs:");
+            String neubesitzer;
+            neubesitzer = user_input.readLine();
+
+            System.out.println("Marke des Autos:");
+            String neumarke;
+            neumarke = user_input.readLine();
+
+            System.out.println("Autotyp:");
+            String neutyp;
+            neutyp = user_input.readLine();
+
+            int neuklasse = 0;                                        //Fahrzeugklasse
+            do {
+                try {
+                    System.out.println("Fahrzeugklassen:");
+
+                    stmt = con.createStatement();
+                    rs = stmt.executeQuery("SELECT * FROM Klassen");
+
+                    while (rs.next()) {
+                        int klassenID = rs.getInt("KlassenID");
+                        String klasse = rs.getString("Klasse");
+                        System.out.println(klassenID + ": " + klasse);
+                    }
+
+                    neuklasse = Integer.parseInt(user_input.readLine());
+
+                } catch (NumberFormatException ex) {
+                    System.out.println("Keine gültige Fahrzeugklasse!");
+                    System.out.println(ex.getMessage());
+                }
+            } while (neuklasse == 0);
+
+            double neuverbrauch = 0;                                        //Verbrauch
+            do {
+                try {
+                    System.out.println("Verbrauch des Autos in l/100km:");
+                    neuverbrauch = Double.parseDouble(user_input.readLine());
+
+                    if (neuverbrauch < 0) {
+                        System.out.println(neuverbrauch + " l/100km ist kein gültiger Verbrauchswert!");
+                        System.out.println("Bitte geben Sie einen positiven Wert ein.");
+                        neuverbrauch = 0;
+                    }
+                } catch (NumberFormatException ex) {
+                    System.out.println("Kein gültiger Verbrauchswert!");
+                    System.out.println("Bitte geben Sie eine Zahl ein.");
+                    System.out.println(ex.getMessage());
+                }
+            } while (neuverbrauch == 0);
+
+            int neuleistung = 0;                                            //Leistung
+            do {
+                try {
+                    System.out.println("Leistung des autos in kW:");
+                    neuleistung = Integer.parseInt(user_input.readLine());
+
+                    if (neuleistung < 0) {
+                        System.out.println(neuleistung + " kW ist kein gültiger Leistungswert!");
+                        System.out.println("Bitte geben Sie einen positiven Wert ein.");
+                        neuleistung = 0;
+                    }
+                } catch (NumberFormatException ex) {
+                    System.out.println("Kein gültiger Leistungswert!");
+                    System.out.println("Bitte geben Sie eine Zahl ein.");
+                    System.out.println(ex.getMessage());
+                }
+            } while (neuleistung == 0);
+
+            int neukmstand = 0;
+            do {
+                try {
+                    System.out.println("Kilometerstand:");
+                    neukmstand = Integer.parseInt(user_input.readLine());
+
+                    if (neukmstand < 0) {
+                        System.out.println(neukmstand + " km ist kein gültiger Kilometerstand!");
+                        System.out.println("Bitte geben Sie einen positiven Wert ein.");
+                        neukmstand = 0;
+                    }
+                } catch (NumberFormatException ex) {
+                    System.out.println("Kein gültiger Kilometerstand!");
+                    System.out.println("Bitte geben Sie eine Zahl ein.");
+                    System.out.println(ex.getMessage());
+                }
+            } while (neukmstand == 0);
+
+            int neutreibstoff = 0;
+            do {
+                try {
+                    System.out.println("Treibstoffart:");
+
+                    stmt = con.createStatement();
+                    rs = stmt.executeQuery("SELECT * FROM Kraftstoffe");
+
+                    while (rs.next()) {
+                        int kraftstoffID = rs.getInt("KraftstoffID");
+                        String kraftstoff = rs.getString("Kraftstoffart");
+                        System.out.println(kraftstoffID + ": " + kraftstoff);
+                    }
+
+                    neutreibstoff = Integer.parseInt(user_input.readLine());
+
+                } catch (NumberFormatException ex) {
+                    System.out.println("Kein gültiger Treibstoff!");
+                    System.out.println(ex.getMessage());
+                }
+            } while (neutreibstoff == 0);
+
+            stmt = con.createStatement();
+            stmt.executeUpdate("UPDATE Fahrzeuge SET Besitzer = '" + neubesitzer
+                    + "', Marke = '" + neumarke + "', Typ = '" + neutyp
+                    + "', Verbrauch = " + neuverbrauch + ", Leistung = " + neuleistung
+                    + ", Kilometerstand = " + neukmstand + ", Kraftstoff = " + neutreibstoff
+                    + ", Klasse = " + neuklasse + " WHERE FahrzeugID = " + id);
+
+            stmt.close();
 
         } catch (SQLException e) {
             System.err.println(e);
