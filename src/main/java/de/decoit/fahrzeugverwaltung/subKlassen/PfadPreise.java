@@ -1,6 +1,6 @@
 package de.decoit.fahrzeugverwaltung.subKlassen;
 
-import de.decoit.fahrzeugverwaltung.abstrakteKlassen.Helper;
+import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Helper;
 
 public class PfadPreise extends Helper {
 

@@ -1,6 +1,6 @@
 package de.decoit.fahrzeugverwaltung.subKlassen;
 
-import de.decoit.fahrzeugverwaltung.abstrakteKlassen.Dateiname;
+import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Dateiname;
 
 public class BerichtName extends Dateiname {
 

@@ -1,6 +1,6 @@
 package de.decoit.fahrzeugverwaltung.subKlassen;
 
-import de.decoit.fahrzeugverwaltung.interfaceKlassen.ExportInterface;
+import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportInterface;
 import de.decoit.fahrzeugverwaltung.KFZ;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
