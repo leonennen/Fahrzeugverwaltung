@@ -51,35 +51,46 @@ public class Main {
 
             if (input.equals("1")) {                                                        //NeuesFahrzeug
 
-               int id =  neuesFahrzeugDatenbank(user_input);
-               anzeigenFahrzeugDatenbank(id);
-               user_input.readLine();
-               
+                int id = neuesFahrzeugDatenbank(user_input);
+                anzeigenFahrzeugDatenbank(id);
+                user_input.readLine();
+
             } else if (input.equals("2")) {                                                 //Liste anzeigen
 
                 listeDatenbank();
                 user_input.readLine();
 
             } else if (input.equals("3")) {                                                 //Fahrzeug Anzeigen
-                
+
+                listeDatenbank();
+
                 try {
                     System.out.println("FahrzeugID?");
                     int id = Integer.parseInt(user_input.readLine());
                     anzeigenFahrzeugDatenbank(id);
-                    
+
                 } catch (Exception ex) {
                     System.out.println("Keine gültige FahrzeugID!");
                     System.out.println(ex.getMessage());
                 }
+                user_input.readLine();
 
             } else if (input.equals("4")) {                                                 //Fahrzeug bearbeiten
 
 //                bearbeitenFahrzeug(user_input, autoListe);
-
             } else if (input.equals("5")) {                                                 //Fahrzeug löschen
 
                 listeDatenbank();
-                löschenFahrzeug(user_input, autoListe);
+
+                try {
+                    System.out.println("FahrzeugID?");
+                    int id = Integer.parseInt(user_input.readLine());
+                    löschenFahrzeugDatenbank(id);
+
+                } catch (Exception ex) {
+                    System.out.println("Keine gültige FahrzeugID!");
+                    System.out.println(ex.getMessage());
+                }
 
             } else if (input.equals("6")) {                                                 //Treibstoffpreise anzeigen
 
@@ -312,17 +323,10 @@ public class Main {
                 String besitzer = rs.getString("Besitzer");
                 String marke = rs.getString("Marke");
                 String typ = rs.getString("Typ");
-                double verbrauch = rs.getDouble("Verbrauch");
-                int leistung = rs.getInt("Leistung");
-                int kmstand = rs.getInt("Kilometerstand");
-                int treibstoff = rs.getInt("Kraftstoff");
                 int klasse = rs.getInt("Klasse");
 
                 System.out.println("ID: " + id + ", Besitzer: " + besitzer + ", Fahrzeug: "
-                        + marke + " " + typ + ", Klasse: " + klasse
-                        + ", \nVerbrauch: " + verbrauch
-                        + "l/100km, Leistung: " + leistung + "kW, Kmstand: "
-                        + kmstand + "km, Treibstoff: " + treibstoff);
+                        + marke + " " + typ + ", Klasse: " + klasse);
 
             }
             rs.close();
@@ -341,7 +345,7 @@ public class Main {
             ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge WHERE FAHRZEUGID = " + id);
 
             rs.next();
-            
+
             String besitzer = rs.getString("Besitzer");
             String marke = rs.getString("Marke");
             String typ = rs.getString("Typ");
@@ -362,28 +366,17 @@ public class Main {
         }
     }
 
-    public void löschenFahrzeug(Console user_input, ArrayList<KFZ> autoListe) {
+    public void löschenFahrzeugDatenbank(int id) {
 
-        int i = 0;
-        do {
-            try {
-                System.out.println("Welches Fahrzeug von der Liste?");
-                int loeschen = Integer.parseInt(user_input.readLine());
+        try {
+            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Fahrzeugverwaltung", "kfz", "kfz");
+            Statement stmt = con.createStatement();
+            stmt.executeUpdate("DELETE FROM Fahrzeuge WHERE FAHRZEUGID = " + id);
+            System.out.println("Fahrzeug gelöscht!");
 
-                if (loeschen < 1 || loeschen > autoListe.size()) {
-                    throw new IllegalStateException("Kein Fahrzeug an dieser Position auf der Liste!");
-                }
-
-                autoListe.remove(loeschen - 1);
-                System.out.println(loeschen + ". Fahrzeug gelöscht!");
-                i = 1;
-                speichernFahrzeug(autoListe);
-
-            } catch (Exception ex) {
-                System.out.println("Keine gültige Zahl!");
-                System.out.println(ex.getMessage());
-            }
-        } while (i == 0);
+        } catch (SQLException e) {
+            System.err.println(e);
+        }
     }
 
     public void preiseÄndern(Console user_input, Treibstoffpreise treibstoffpreise) {
