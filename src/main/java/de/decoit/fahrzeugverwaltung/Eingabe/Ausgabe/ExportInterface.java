@@ -1,10 +1,10 @@
 package de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe;
 
-import de.decoit.fahrzeugverwaltung.KFZ;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.Statement;
 
 public interface ExportInterface {
 
-    public void listeExport(String name, ArrayList<KFZ> autoListe);
+    public void DatenbankExport(String name, Connection con, Statement stmt);
 
 }

@@ -1,0 +1,6 @@
+ID: 2, Besitzer: Leon Ennen, Fahrzeug: Mercedes W169, Klasse: 2, 
+Verbrauch: 8.6l/100km, Leistung: 86kW, Kmstand: 3094687km, Treibstoff: 2
+ID: 3, Besitzer: Max Mustermann, Fahrzeug: BMW 525d, Klasse: 3, 
+Verbrauch: 6.5l/100km, Leistung: 120kW, Kmstand: 34875km, Treibstoff: 4
+ID: 4, Besitzer: Maike Musterfrau, Fahrzeug: BMW 525d, Klasse: 3, 
+Verbrauch: 8.0l/100km, Leistung: 120kW, Kmstand: 1345km, Treibstoff: 4

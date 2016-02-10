@@ -1,33 +1,50 @@
 package de.decoit.fahrzeugverwaltung.subKlassen;
 
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportInterface;
-import de.decoit.fahrzeugverwaltung.KFZ;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class BerichtExport implements ExportInterface {
 
     @Override
-    public void listeExport(String name, ArrayList<KFZ> autoListe) {
-
-        String export = "";
-
-        for (KFZ auto : autoListe) {
-
-            export = export + "Kfz: Besitzer: " + auto.getBesitzer() + ", Fahrzeug: "
-                    + auto.getMarke() + " " + auto.getTyp() + ", Klasse: " + auto.getKlasse()
-                    + ", Verbrauch: " + auto.getVerbrauch()
-                    + "l/100km, Leistung: " + auto.getLeistung() + "kW, Kmstand: "
-                    + auto.getKmstand() + "km, Treibstoff: " + auto.getTreibstoff() + "\n";
-        }
-
-        System.out.println(export);
+    public void DatenbankExport(String name, Connection con, Statement stmt) {
 
         PfadDatei pfad = new PfadDatei();
         BerichtName dateiname = new BerichtName();
 
+        String export = "";
+
         try (PrintStream out = new PrintStream(new FileOutputStream(pfad.pfad() + dateiname.dateiname(name)))) {
+
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge");
+
+            while (rs.next()) {
+
+                int id = rs.getInt("FahrzeugID");
+                String besitzer = rs.getString("Besitzer");
+                String marke = rs.getString("Marke");
+                String typ = rs.getString("Typ");
+                double verbrauch = rs.getDouble("Verbrauch");
+                int leistung = rs.getInt("Leistung");
+                int kmstand = rs.getInt("Kilometerstand");
+                int treibstoff = rs.getInt("Kraftstoff");
+                int klasse = rs.getInt("Klasse");
+
+                export = export + "ID: " + rs.getInt("FahrzeugID")
+                        + ", Besitzer: " + rs.getString("Besitzer")
+                        + ", Fahrzeug: " + rs.getString("Marke") + " " + rs.getString("Typ")
+                        + ", Klasse: " + klasse
+                        + ", \nVerbrauch: " + rs.getDouble("Verbrauch")
+                        + "l/100km, Leistung: " + rs.getInt("Leistung")
+                        + "kW, Kmstand: " + rs.getInt("Kilometerstand")
+                        + "km, Treibstoff: " + treibstoff + "\n";
+
+            }
+
+            System.out.println(export);
 
             out.print(export);
 

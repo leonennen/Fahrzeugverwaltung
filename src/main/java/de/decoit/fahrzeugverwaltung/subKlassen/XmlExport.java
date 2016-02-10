@@ -1,42 +1,51 @@
 package de.decoit.fahrzeugverwaltung.subKlassen;
 
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportInterface;
-import de.decoit.fahrzeugverwaltung.KFZ;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class XmlExport implements ExportInterface {
 
     @Override
-    public void listeExport(String name, ArrayList<KFZ> autoListe) {
-
-        String export = "";
-
-        for (KFZ auto : autoListe) {
-
-            export = export + "<KFZ>\n"
-                    + "<Besitzer>" + auto.getBesitzer() + "</Besitzer>\n"
-                    + "<Marke>" + auto.getMarke() + "</Marke>\n"
-                    + "<Typ>" + auto.getTyp() + "</Typ>\n"
-                    + "<Klasse>" + auto.getKlasse() + "</Klasse>\n"
-                    + "<Verbrauch>" + auto.getVerbrauch() + "</Verbrauch>\n"
-                    + "<Leistung>" + auto.getLeistung() + "</Leistung>\n"
-                    + "<Kilometerstand>" + auto.getKmstand() + "</Kilometerstand>\n"
-                    + "<Treibstoff>" + auto.getTreibstoff() + "</Treibstoff>\n"
-                    + "</KFZ>\n";
-        }
-
-        export = "<?xml version=\"1.0\"?>\n"
-                + "<Fahrzeugverwaltung>\n" + export
-                + "</Fahrzeugverwaltung>\n";
-
-        System.out.println(export);
+    public void DatenbankExport(String name, Connection con, Statement stmt) {
 
         PfadDatei pfad = new PfadDatei();
         XmlName dateiname = new XmlName();
 
+        String export = "";
+
         try (PrintStream out = new PrintStream(new FileOutputStream(pfad.pfad() + dateiname.dateiname(name)))) {
+
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge");
+
+            while (rs.next()) {
+
+                int klasse = rs.getInt("Klasse");
+                int treibstoff = rs.getInt("Kraftstoff");
+
+                export = export + "<KFZ>\n"
+                        + "<FahrzeugID>" + rs.getInt("FahrzeugID") + "</FahrzeugID>\n"
+                        + "<Besitzer>" + rs.getString("Besitzer") + "</Besitzer>\n"
+                        + "<Marke>" + rs.getString("Marke") + "</Marke>\n"
+                        + "<Typ>" + rs.getString("Typ") + "</Typ>\n"
+                        + "<Klasse>" + klasse + "</Klasse>\n"
+                        + "<Verbrauch>" + rs.getDouble("Verbrauch") + "</Verbrauch>\n"
+                        + "<Leistung>" + rs.getInt("Leistung") + "</Leistung>\n"
+                        + "<Kilometerstand>" + rs.getInt("Kilometerstand") + "</Kilometerstand>\n"
+                        + "<Treibstoff>" + treibstoff + "</Treibstoff>\n"
+                        + "</KFZ>\n";
+
+            }
+
+            export = "<?xml version=\"1.0\"?>\n"
+                    + "<Fahrzeugverwaltung>\n"
+                    + export
+                    + "</Fahrzeugverwaltung>\n";
+
+            System.out.println(export);
 
             out.print(export);
 
@@ -49,4 +58,5 @@ public class XmlExport implements ExportInterface {
             System.out.println("---------------------------------------------------------------------------------");
         }
     }
+
 }

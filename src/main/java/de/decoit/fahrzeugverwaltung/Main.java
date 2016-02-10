@@ -1,6 +1,9 @@
 package de.decoit.fahrzeugverwaltung;
 
+import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datei;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank;
+import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportAuswahl;
+import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportInterface;
 import java.io.*;
 import java.sql.*;
 
@@ -14,9 +17,9 @@ public class Main {
     public Main() {
 
         Console user_input = System.console();
-        
+
         try {
-            
+
             Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Fahrzeugverwaltung", "kfz", "kfz");
 
             do {
@@ -64,17 +67,17 @@ public class Main {
                         System.out.println("Keine gültige FahrzeugID!");
                         System.out.println(ex.getMessage());
                     }
-                    
+
                 } else if (input.equals("4")) {                                                 //Fahrzeug bearbeiten
 
                     liste(con, stmt);
 
                     try {
-                        
+
                         System.out.println("FahrzeugID?");
-                        
+
                         int id = Integer.parseInt(user_input.readLine());
-                        
+
                         bearbeitenFahrzeug(user_input, id, con, stmt);
 
                     } catch (Exception ex) {
@@ -118,13 +121,11 @@ public class Main {
 
                 } else if (input.equals("10")) {                                                 //Exportieren
 
-//                exportieren(user_input, autoListe);
+                    exportieren(user_input, con, stmt);
                     user_input.readLine();
 
                 } else if (input.equals("11")) {                                                 //Beenden
 
-//                speichernFahrzeug(autoListe);
-//                speichernPreise(treibstoffpreise);
                     System.out.println("Wird beendet!");
                     System.exit(0);
 
@@ -179,29 +180,29 @@ public class Main {
         datenbank.löschenFahrzeugDatenbank(id, con, stmt);
     }
 
-//    public void exportieren(Console user_input, ArrayList<KFZ> autoListe) {
-//
-//        System.out.println("Dateinamen wählen:");
-//        String name = user_input.readLine();
-//
-//        Datei eingabe = null;
-//        do {
-//            try {
-//                System.out.println("Dateiormat wählen:");
-//                System.out.println("Bericht | XML | CSV");
-//
-//                eingabe = Datei.valueOf(user_input.readLine());
-//
-//            } catch (IllegalArgumentException ex) {
-//                System.out.println("Kein gültiges Dateiformat!");
-//                System.out.println(ex.getMessage());
-//            }
-//        } while (eingabe == null);
-//
-//        ExportInterface exportdatei = ExportAuswahl.auswahl(eingabe);
-//        exportdatei.listeExport(name, autoListe);
-//
-//    }
+    public void exportieren(Console user_input, Connection con, Statement stmt) {
+
+        System.out.println("Dateinamen wählen:");
+        String name = user_input.readLine();
+
+        Datei eingabe = null;
+        do {
+            try {
+                System.out.println("Dateiormat wählen:");
+                System.out.println("Bericht | XML | CSV");
+
+                eingabe = Datei.valueOf(user_input.readLine());
+
+            } catch (IllegalArgumentException ex) {
+                System.out.println("Kein gültiges Dateiformat!");
+                System.out.println(ex.getMessage());
+            }
+        } while (eingabe == null);
+
+        ExportInterface exportdatei = ExportAuswahl.auswahl(eingabe);
+        exportdatei.DatenbankExport(name, con, stmt);
+
+    }
 //    public void spritVerbrauch(Console user_input, ArrayList<KFZ> autoListe, Treibstoffpreise treibstoffpreise) {
 //
 //        System.out.println("Für welches Fahrzeug?");
@@ -277,16 +278,4 @@ public class Main {
 //        System.out.println(new Ausgabe().autoAusgabe(auto));
 //        System.out.println("--------------------------------------------------------------------------------");
 //    }
-//    public void speichernFahrzeug(ArrayList<KFZ> autoListe) {
-//
-//        Serializer serializer = new Serializer();
-//        serializer.serializeAuto(autoListe);
-//    }
-//
-//    public void speichernPreise(Treibstoffpreise treibstoffpreise) {
-//
-//        Serializer serializer = new Serializer();
-//        serializer.serializeTreibstoffpreise(treibstoffpreise);
-//    }
-//
 }
