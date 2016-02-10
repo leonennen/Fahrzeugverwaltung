@@ -7,17 +7,20 @@ public class Datenbank {
 
     public void listeDatenbank(Connection con, Statement stmt) {
         try {
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge\n"
+                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
+                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF");
 
             while (rs.next()) {
                 int id = rs.getInt("FahrzeugID");
                 String besitzer = rs.getString("Besitzer");
                 String marke = rs.getString("Marke");
                 String typ = rs.getString("Typ");
-                int klasse = rs.getInt("Klasse");
+                String klasse = rs.getString("Fahrzeugklasse");
+                String kraftstoff = rs.getString("Kraftstoffart");
 
                 System.out.println("ID: " + id + ", Besitzer: " + besitzer + ", Fahrzeug: "
-                        + marke + " " + typ + ", Klasse: " + klasse);
+                        + marke + " " + typ + ", " + klasse + ", Antrieb: " + kraftstoff);
 
             }
 

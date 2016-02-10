@@ -19,7 +19,9 @@ public class XmlExport implements ExportInterface {
 
         try (PrintStream out = new PrintStream(new FileOutputStream(pfad.pfad() + dateiname.dateiname(name)))) {
 
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge\n"
+                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
+                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF");
 
             while (rs.next()) {
 
@@ -31,11 +33,11 @@ public class XmlExport implements ExportInterface {
                         + "<Besitzer>" + rs.getString("Besitzer") + "</Besitzer>\n"
                         + "<Marke>" + rs.getString("Marke") + "</Marke>\n"
                         + "<Typ>" + rs.getString("Typ") + "</Typ>\n"
-                        + "<Klasse>" + klasse + "</Klasse>\n"
+                        + "<Klasse>" + rs.getString("Fahrzeugklasse") + "</Klasse>\n"
                         + "<Verbrauch>" + rs.getDouble("Verbrauch") + "</Verbrauch>\n"
                         + "<Leistung>" + rs.getInt("Leistung") + "</Leistung>\n"
                         + "<Kilometerstand>" + rs.getInt("Kilometerstand") + "</Kilometerstand>\n"
-                        + "<Treibstoff>" + treibstoff + "</Treibstoff>\n"
+                        + "<Treibstoff>" + rs.getString("Kraftstoffart") + "</Treibstoff>\n"
                         + "</KFZ>\n";
 
             }

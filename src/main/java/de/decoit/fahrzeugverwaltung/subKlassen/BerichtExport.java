@@ -19,28 +19,20 @@ public class BerichtExport implements ExportInterface {
 
         try (PrintStream out = new PrintStream(new FileOutputStream(pfad.pfad() + dateiname.dateiname(name)))) {
 
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge\n"
+                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
+                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF");
 
             while (rs.next()) {
-
-                int id = rs.getInt("FahrzeugID");
-                String besitzer = rs.getString("Besitzer");
-                String marke = rs.getString("Marke");
-                String typ = rs.getString("Typ");
-                double verbrauch = rs.getDouble("Verbrauch");
-                int leistung = rs.getInt("Leistung");
-                int kmstand = rs.getInt("Kilometerstand");
-                int treibstoff = rs.getInt("Kraftstoff");
-                int klasse = rs.getInt("Klasse");
 
                 export = export + "ID: " + rs.getInt("FahrzeugID")
                         + ", Besitzer: " + rs.getString("Besitzer")
                         + ", Fahrzeug: " + rs.getString("Marke") + " " + rs.getString("Typ")
-                        + ", Klasse: " + klasse
+                        + ", " + rs.getString("Fahrzeugklasse")
                         + ", \nVerbrauch: " + rs.getDouble("Verbrauch")
                         + "l/100km, Leistung: " + rs.getInt("Leistung")
                         + "kW, Kmstand: " + rs.getInt("Kilometerstand")
-                        + "km, Treibstoff: " + treibstoff + "\n";
+                        + "km, Treibstoff: " + rs.getString("Kraftstoffart") + "\n";
 
             }
 

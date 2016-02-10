@@ -19,18 +19,17 @@ public class CsvExport implements ExportInterface {
 
         try (PrintStream out = new PrintStream(new FileOutputStream(pfad.pfad() + dateiname.dateiname(name)))) {
 
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge\n"
+                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
+                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF");
 
             while (rs.next()) {
 
-                int treibstoff = rs.getInt("Kraftstoff");
-                int klasse = rs.getInt("Klasse");
-
                 export = export + rs.getInt("FahrzeugID") + "," + rs.getString("Besitzer") + ","
                         + rs.getString("Marke") + "," + rs.getString("Typ") + ","
-                        + klasse + "," + rs.getDouble("Verbrauch") + ","
+                        + rs.getString("Fahrzeugklasse") + "," + rs.getDouble("Verbrauch") + ","
                         + rs.getInt("Leistung") + "," + rs.getInt("Kilometerstand") + ","
-                        + treibstoff + "\n";
+                        + rs.getString("Kraftstoffart") + "\n";
 
             }
 
