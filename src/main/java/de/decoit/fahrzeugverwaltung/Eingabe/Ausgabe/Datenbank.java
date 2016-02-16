@@ -1,37 +1,36 @@
 package de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe;
 
-import java.io.Console;
 import java.sql.*;
 
 public class Datenbank {
 
-    public static void listeDatenbank(Statement stmt) {
+    public static void listeDatenbank() {
         try {
+            stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge\n"
                     + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
                     + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF");
-
             while (rs.next()) {
                 int id = rs.getInt("FahrzeugID");
                 String besitzer = rs.getString("Besitzer");
                 String marke = rs.getString("Marke");
                 String typ = rs.getString("Typ");
-                String klasse = rs.getString("Fahrzeugklasse");
+                String klasse = rs.getString("Klasse");
                 String kraftstoff = rs.getString("Kraftstoffart");
 
                 System.out.println("ID: " + id + ", Besitzer: " + besitzer + ", Fahrzeug: "
                         + marke + " " + typ + ", " + klasse + ", Antrieb: " + kraftstoff);
-
             }
-
+            stmt.close();
         } catch (SQLException e) {
             System.err.println(e);
         }
     }
 
-    public static void listeKraftstoffDatenbank(Statement stmt) {
+    public static void listeKraftstoffDatenbank() {
 
         try {
+            stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Kraftstoffe");
 
             while (rs.next()) {
@@ -39,7 +38,7 @@ public class Datenbank {
                 double preis = rs.getDouble("Preis");
 
                 System.out.println(art + ": " + preis + "€");
-
+                stmt.close();
             }
 
         } catch (SQLException e) {
@@ -47,25 +46,26 @@ public class Datenbank {
         }
     }
 
-    public static void neuesFahrzeugDatenbank(Console user_input, Connection con, Statement stmt) {
+    public static void neuesFahrzeugDatenbank() {
 
         int id = 0;
         try {
+            stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT MAX(FAHRZEUGID) FROM Fahrzeuge");
             rs.next();
             id = rs.getInt(1) + 1;
 
             System.out.println("Besitzer des Fahrzeugs:");
             String neubesitzer;
-            neubesitzer = user_input.readLine();
+            neubesitzer = Helper.user_input.readLine();
 
             System.out.println("Marke des Autos:");
             String neumarke;
-            neumarke = user_input.readLine();
+            neumarke = Helper.user_input.readLine();
 
             System.out.println("Autotyp:");
             String neutyp;
-            neutyp = user_input.readLine();
+            neutyp = Helper.user_input.readLine();
 
             int neuklasse = 0;                                        //Fahrzeugklasse
             do {
@@ -81,7 +81,7 @@ public class Datenbank {
                         System.out.println(klassenID + ": " + klasse);
                     }
 
-                    neuklasse = Integer.parseInt(user_input.readLine());
+                    neuklasse = Integer.parseInt(Helper.user_input.readLine());
 
                 } catch (NumberFormatException ex) {
                     System.out.println("Keine gültige Fahrzeugklasse!");
@@ -93,7 +93,7 @@ public class Datenbank {
             do {
                 try {
                     System.out.println("Verbrauch des Autos in l/100km:");
-                    neuverbrauch = Double.parseDouble(user_input.readLine());
+                    neuverbrauch = Double.parseDouble(Helper.user_input.readLine());
 
                     if (neuverbrauch < 0) {
                         System.out.println(neuverbrauch + " l/100km ist kein gültiger Verbrauchswert!");
@@ -111,7 +111,7 @@ public class Datenbank {
             do {
                 try {
                     System.out.println("Leistung des autos in kW:");
-                    neuleistung = Integer.parseInt(user_input.readLine());
+                    neuleistung = Integer.parseInt(Helper.user_input.readLine());
 
                     if (neuleistung < 0) {
                         System.out.println(neuleistung + " kW ist kein gültiger Leistungswert!");
@@ -129,7 +129,7 @@ public class Datenbank {
             do {
                 try {
                     System.out.println("Kilometerstand:");
-                    neukmstand = Integer.parseInt(user_input.readLine());
+                    neukmstand = Integer.parseInt(Helper.user_input.readLine());
 
                     if (neukmstand < 0) {
                         System.out.println(neukmstand + " km ist kein gültiger Kilometerstand!");
@@ -157,7 +157,7 @@ public class Datenbank {
                         System.out.println(kraftstoffID + ": " + kraftstoff);
                     }
 
-                    neutreibstoff = Integer.parseInt(user_input.readLine());
+                    neutreibstoff = Integer.parseInt(Helper.user_input.readLine());
 
                 } catch (NumberFormatException ex) {
                     System.out.println("Kein gültiger Treibstoff!");
@@ -171,34 +171,33 @@ public class Datenbank {
                     + neuverbrauch + ", " + neuleistung + ", "
                     + neukmstand + ", " + neutreibstoff + ", " + neuklasse + ")");
 
-            rs.close();
             stmt.close();
 
             System.out.println("Eintrag erstellt!");
-            anzeigenFahrzeugDatenbank(id, con, stmt);
-            user_input.readLine();
+            anzeigenFahrzeugDatenbank(id);
+            Helper.user_input.readLine();
 
         } catch (SQLException e) {
             System.err.println(e);
         }
     }
 
-    public static void bearbeitenFahrzeugDatenbank(Console user_input, int id, Connection con, Statement stmt) {
+    public static void bearbeitenFahrzeugDatenbank(int id) {
 
         try {
             ResultSet rs;
 
             System.out.println("Besitzer des Fahrzeugs:");
             String neubesitzer;
-            neubesitzer = user_input.readLine();
+            neubesitzer = Helper.user_input.readLine();
 
             System.out.println("Marke des Autos:");
             String neumarke;
-            neumarke = user_input.readLine();
+            neumarke = Helper.user_input.readLine();
 
             System.out.println("Autotyp:");
             String neutyp;
-            neutyp = user_input.readLine();
+            neutyp = Helper.user_input.readLine();
 
             int neuklasse = 0;                                        //Fahrzeugklasse
             do {
@@ -214,7 +213,7 @@ public class Datenbank {
                         System.out.println(klassenID + ": " + klasse);
                     }
 
-                    neuklasse = Integer.parseInt(user_input.readLine());
+                    neuklasse = Integer.parseInt(Helper.user_input.readLine());
 
                 } catch (NumberFormatException ex) {
                     System.out.println("Keine gültige Fahrzeugklasse!");
@@ -226,7 +225,7 @@ public class Datenbank {
             do {
                 try {
                     System.out.println("Verbrauch des Autos in l/100km:");
-                    neuverbrauch = Double.parseDouble(user_input.readLine());
+                    neuverbrauch = Double.parseDouble(Helper.user_input.readLine());
 
                     if (neuverbrauch < 0) {
                         System.out.println(neuverbrauch + " l/100km ist kein gültiger Verbrauchswert!");
@@ -244,7 +243,7 @@ public class Datenbank {
             do {
                 try {
                     System.out.println("Leistung des autos in kW:");
-                    neuleistung = Integer.parseInt(user_input.readLine());
+                    neuleistung = Integer.parseInt(Helper.user_input.readLine());
 
                     if (neuleistung < 0) {
                         System.out.println(neuleistung + " kW ist kein gültiger Leistungswert!");
@@ -262,7 +261,7 @@ public class Datenbank {
             do {
                 try {
                     System.out.println("Kilometerstand:");
-                    neukmstand = Integer.parseInt(user_input.readLine());
+                    neukmstand = Integer.parseInt(Helper.user_input.readLine());
 
                     if (neukmstand < 0) {
                         System.out.println(neukmstand + " km ist kein gültiger Kilometerstand!");
@@ -290,7 +289,7 @@ public class Datenbank {
                         System.out.println(kraftstoffID + ": " + kraftstoff);
                     }
 
-                    neutreibstoff = Integer.parseInt(user_input.readLine());
+                    neutreibstoff = Integer.parseInt(Helper.user_input.readLine());
 
                 } catch (NumberFormatException ex) {
                     System.out.println("Kein gültiger Treibstoff!");
@@ -309,16 +308,17 @@ public class Datenbank {
 
             System.out.println("Eintrag bearbeitet!");
 
-            anzeigenFahrzeugDatenbank(id, con, stmt);
+            anzeigenFahrzeugDatenbank(id);
 
         } catch (SQLException e) {
             System.err.println(e);
         }
     }
 
-    public static void bearbeitenKraftstoffDatenbank(Console user_input, Connection con, Statement stmt) {
+    public static void bearbeitenKraftstoffDatenbank() {
 
         try {
+            stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Kraftstoffe");
             double preis;
 
@@ -327,7 +327,7 @@ public class Datenbank {
                 int id = rs.getInt(1);
                 String Kraftstoff = rs.getString(2);
                 System.out.println("Aktueller Preis für " + Kraftstoff + ":");
-                preis = Double.parseDouble(user_input.readLine());
+                preis = Double.parseDouble(Helper.user_input.readLine());
                 stmt.executeUpdate("UPDATE Kraftstoffe SET Preis = " + preis + " WHERE KraftstoffID = " + id);
                 stmt.close();
             }
@@ -339,9 +339,10 @@ public class Datenbank {
         }
     }
 
-    public static void anzeigenFahrzeugDatenbank(int id, Connection con, Statement stmt) {
+    public static void anzeigenFahrzeugDatenbank(int id) {
 
         try {
+            stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge WHERE FAHRZEUGID = " + id);
 
             rs.next();
@@ -360,21 +361,35 @@ public class Datenbank {
                     + ", \nVerbrauch: " + verbrauch
                     + "l/100km, Leistung: " + leistung + "kW, Kmstand: "
                     + kmstand + "km, Treibstoff: " + treibstoff);
-
+            stmt.close();
         } catch (SQLException e) {
             System.err.println(e);
         }
     }
 
-    public static void löschenFahrzeugDatenbank(int id, Connection con, Statement stmt) {
+    public static void löschenFahrzeugDatenbank(int id) {
 
         try {
+            stmt = con.createStatement();
             stmt.executeUpdate("DELETE FROM Fahrzeuge WHERE FAHRZEUGID = " + id);
             System.out.println("Fahrzeug gelöscht!");
-
+            stmt.close();
         } catch (SQLException e) {
             System.err.println(e);
         }
+    }
+
+    public static Connection con;
+    public static Statement stmt;
+
+    static {
+        Connection temp1 = null;
+        try {
+            temp1 = DriverManager.getConnection("jdbc:derby://localhost:1527/Fahrzeugverwaltung", "kfz", "kfz");
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+        con = temp1;
     }
 
 }

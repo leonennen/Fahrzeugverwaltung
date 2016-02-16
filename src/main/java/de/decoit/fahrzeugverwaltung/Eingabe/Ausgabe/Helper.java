@@ -1,8 +1,6 @@
 package de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.io.Console;
 
 public abstract class Helper {
 
@@ -14,12 +12,7 @@ public abstract class Helper {
 
     }
 
-    public static void input() {
-        try {
-            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Fahrzeugverwaltung", "kfz", "kfz");
-        } catch (SQLException ex) {
-        }
-    }
+    public static Console user_input = System.console();
 
 }
 
