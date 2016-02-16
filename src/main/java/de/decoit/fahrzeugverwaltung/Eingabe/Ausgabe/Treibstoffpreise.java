@@ -2,9 +2,8 @@ package de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe;
 
 import de.decoit.fahrzeugverwaltung.KFZ;
 import de.decoit.fahrzeugverwaltung.Treibstoff;
-import java.io.Serializable;
 
-public class Treibstoffpreise implements Serializable {
+public class Treibstoffpreise {
 
     public double dieselpreis;
     public double benzinpreis;

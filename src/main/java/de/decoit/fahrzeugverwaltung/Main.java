@@ -2,6 +2,7 @@ package de.decoit.fahrzeugverwaltung;
 
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datei;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank;
+import static de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank.stmt;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportAuswahl;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportInterface;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Helper;
@@ -92,6 +93,7 @@ public class Main {
                         break;
                     case "8":
                         Datenbank.listeDatenbank();
+                        spritVerbrauch();
                         Helper.user_input.readLine();
                         break;
                     case "9":
@@ -102,7 +104,6 @@ public class Main {
                         Helper.user_input.readLine();
                         break;
                     case "11":
-
                         System.out.println("Wird beendet!");
                         System.exit(0);
                     default:
@@ -143,50 +144,44 @@ public class Main {
         exportdatei.DatenbankExport(name);
 
     }
-//    public void spritVerbrauch(Console user_input, ArrayList<KFZ> autoListe, Treibstoffpreise treibstoffpreise) {
-//
-//        System.out.println("Für welches Fahrzeug?");
-//
-//        KFZ auto = null;
-//        int input = 0;
-//        do {
-//            try {
-//                input = Integer.parseInt(user_input.readLine());
-//
-//                if (input < 1 || input > autoListe.size()) {
-//                    input = 0;
-//                    throw new IllegalStateException("Kein Fahrzeug an dieser Position auf der Liste!");
-//                }
-//                input = 1;
-//
-//            } catch (Exception ex) {
-//                System.out.println("Keine gültige Zahl!");
-//                System.out.println(ex.getMessage());
-//            }
-//
-//        } while (input == 0);
-//        do {
-//            try {
-//                auto = autoListe.get(input - 1);
-//            } catch (IndexOutOfBoundsException ex) {
-//                System.out.println(ex.getMessage());
-//            }
-//        } while (auto == null);
-//
-//        System.out.println(
-//                "Für welche Strecke in Kilometern?");
-//        int strecke = Integer.parseInt(user_input.readLine());
-//
-//        double preis = treibstoffpreise.preis(auto);
-//        double kosten = auto.kosten(strecke + Verschleißwerte.verschleiß(auto, strecke), preis);
-//
-//        System.out.println(
-//                "--------------------------------------------------------------------------------");
-//        System.out.println(
-//                "Für eine Strecke von " + strecke + "km, betragen die Kosten " + kosten + "€.");
-//        System.out.println(
-//                "--------------------------------------------------------------------------------");
-//    }
+
+    public static void spritVerbrauch() {
+
+        try {
+            int id = 0;
+            int strecke = 0;
+            do {
+                try {
+                    System.out.println("Für welches Fahrzeug?");
+                    id = Integer.parseInt(Helper.user_input.readLine());
+                    System.out.println("Für welche Strecke in Kilometern?");
+                    strecke = Integer.parseInt(Helper.user_input.readLine());
+                } catch (NumberFormatException ex) {
+                    System.out.println(ex);
+                }
+            } while (id == 0);
+
+            stmt = Datenbank.con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge\n"
+                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
+                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF\n"
+                    + "WHERE FAHRZEUGID = " + id);
+            rs.next();
+            
+            double preis = rs.getDouble("Preis");
+
+            double kosten = (Verschleißwerte.verschleiß(id, strecke) + strecke) * preis;
+
+            System.out.println(
+                    "--------------------------------------------------------------------------------");
+            System.out.println(
+                    "Für eine Strecke von " + strecke + "km, betragen die Kosten " + kosten + "€.");
+            System.out.println(
+                    "--------------------------------------------------------------------------------");
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }
 //    public void sparsamstesFahrzeug(Console user_input, ArrayList<KFZ> autoListe, Treibstoffpreise treibstoffpreise) {
 //
 //        System.out.println("Für welche Strecke in Kilometern?");
