@@ -19,8 +19,9 @@ public class Main {
         Console user_input = System.console();
 
         try {
-
-            Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/Fahrzeugverwaltung", "kfz", "kfz");
+            
+            Connection con;
+            con = DriverManager.getConnection("jdbc:derby://localhost:1527/Fahrzeugverwaltung", "kfz", "kfz");
 
             do {
 
@@ -42,97 +43,78 @@ public class Main {
 
                 String input = user_input.readLine();
 
-                Statement stmt = con.createStatement();
+                Statement stmt;
+                stmt = con.createStatement();
 
-                if (input.equals("1")) {                                                        //NeuesFahrzeug
+                switch (input) {
+                    case "1":
+                        Datenbank.neuesFahrzeugDatenbank(user_input, con, stmt);
+                        break;
+                    case "2":
+                        liste(con, stmt);
+                        user_input.readLine();
+                        break;
+                    case "3":
+                        liste(con, stmt);
+                        try {
+                            System.out.println("FahrzeugID?");
+                            int id = Integer.parseInt(user_input.readLine());
+                            anzeigenFahrzeug(id, con, stmt);
 
-                    Datenbank datenbank = new Datenbank();
-                    datenbank.neuesFahrzeugDatenbank(user_input, con, stmt);
+                        } catch (Exception ex) {
+                            System.out.println("Keine gültige FahrzeugID!");
+                            System.out.println(ex.getMessage());
+                        }
+                        break;
+                    case "4":
+                        liste(con, stmt);
+                        try {
+                            System.out.println("FahrzeugID?");
+                            int id = Integer.parseInt(user_input.readLine());
+                            bearbeitenFahrzeug(user_input, id, con, stmt);
 
-                } else if (input.equals("2")) {                                                 //Liste anzeigen
+                        } catch (Exception ex) {
+                            System.out.println("Keine gültige FahrzeugID!");
+                            System.out.println(ex.getMessage());
+                        }
+                        break;
+                    case "5":
+                        liste(con, stmt);
+                        try {
+                            System.out.println("FahrzeugID?");
+                            int id = Integer.parseInt(user_input.readLine());
+                            löschenFahrzeug(id, con, stmt);
 
-                    liste(con, stmt);
-                    user_input.readLine();
+                        } catch (Exception ex) {
+                            System.out.println("Keine gültige FahrzeugID!");
+                            System.out.println(ex.getMessage());
+                        }
+                        break;
+                    case "6":
+                        listeKraftstoff(con, stmt);
+                        user_input.readLine();
+                        break;
+                    case "7":
+                        bearbeitenKraftstoff(user_input, con, stmt);
+                        break;
+                    case "8":
+                        liste(con, stmt);
+                        user_input.readLine();
+                        break;
+                    case "9":
+                        user_input.readLine();
+                        break;
+                    case "10":
+                        exportieren(user_input, con, stmt);
+                        user_input.readLine();
+                        break;
+                    case "11":
 
-                } else if (input.equals("3")) {                                                 //Fahrzeug Anzeigen
-
-                    liste(con, stmt);
-
-                    try {
-                        System.out.println("FahrzeugID?");
-                        int id = Integer.parseInt(user_input.readLine());
-                        anzeigenFahrzeug(id, con, stmt);
-
-                    } catch (Exception ex) {
-                        System.out.println("Keine gültige FahrzeugID!");
-                        System.out.println(ex.getMessage());
-                    }
-
-                } else if (input.equals("4")) {                                                 //Fahrzeug bearbeiten
-
-                    liste(con, stmt);
-
-                    try {
-
-                        System.out.println("FahrzeugID?");
-
-                        int id = Integer.parseInt(user_input.readLine());
-
-                        bearbeitenFahrzeug(user_input, id, con, stmt);
-
-                    } catch (Exception ex) {
-                        System.out.println("Keine gültige FahrzeugID!");
-                        System.out.println(ex.getMessage());
-                    }
-
-                } else if (input.equals("5")) {                                                 //Fahrzeug löschen
-
-                    liste(con, stmt);
-
-                    try {
-                        System.out.println("FahrzeugID?");
-                        int id = Integer.parseInt(user_input.readLine());
-                        löschenFahrzeug(id, con, stmt);
-
-                    } catch (Exception ex) {
-                        System.out.println("Keine gültige FahrzeugID!");
-                        System.out.println(ex.getMessage());
-                    }
-
-                } else if (input.equals("6")) {                                                 //Treibstoffpreise anzeigen
-
-                    listeKraftstoff(con, stmt);
-                    user_input.readLine();
-
-                } else if (input.equals("7")) {                                                 //Treibstoffpreise ändern
-
-                    bearbeitenKraftstoff(user_input, con, stmt);
-
-                } else if (input.equals("8")) {                                                 //Verbrauch für bestimmtes Auto berechnen
-
-                    liste(con, stmt);
-//                spritVerbrauch(user_input, autoListe, treibstoffpreise);
-                    user_input.readLine();
-
-                } else if (input.equals("9")) {                                                 //Sparsamstes Auto anzeigen
-
-//                sparsamstesFahrzeug(user_input, autoListe, treibstoffpreise);
-                    user_input.readLine();
-
-                } else if (input.equals("10")) {                                                 //Exportieren
-
-                    exportieren(user_input, con, stmt);
-                    user_input.readLine();
-
-                } else if (input.equals("11")) {                                                 //Beenden
-
-                    System.out.println("Wird beendet!");
-                    System.exit(0);
-
-                } else {
-
-                    System.out.println("Falsche Eingabe!!!");
-
+                        System.out.println("Wird beendet!");
+                        System.exit(0);
+                    default:
+                        System.out.println("Falsche Eingabe!!!");
+                        break;
                 }
 
                 stmt.close();
@@ -145,42 +127,37 @@ public class Main {
         }
     }
 
-    public void liste(Connection con, Statement stmt) {
-        Datenbank datenbank = new Datenbank();
-        datenbank.listeDatenbank(con, stmt);
+    public static void liste(Connection con, Statement stmt) {
+
+        Datenbank.listeDatenbank(stmt);
     }
 
-    public void listeKraftstoff(Connection con, Statement stmt) {
+    public static void listeKraftstoff(Connection con, Statement stmt) {
 
-        Datenbank datenbank = new Datenbank();
-        datenbank.listeKraftstoffDatenbank(con, stmt);
+        Datenbank.listeKraftstoffDatenbank(stmt);
     }
 
-    public void anzeigenFahrzeug(int id, Connection con, Statement stmt) {
+    public static void anzeigenFahrzeug(int id, Connection con, Statement stmt) {
 
-        Datenbank datenbank = new Datenbank();
-        datenbank.anzeigenFahrzeugDatenbank(id, con, stmt);
+        Datenbank.anzeigenFahrzeugDatenbank(id, con, stmt);
     }
 
-    public void bearbeitenFahrzeug(Console user_input, int id, Connection con, Statement stmt) {
+    public static void bearbeitenFahrzeug(Console user_input, int id, Connection con, Statement stmt) {
 
-        Datenbank datenbank = new Datenbank();
-        datenbank.bearbeitenFahrzeugDatenbank(user_input, id, con, stmt);
+        Datenbank.bearbeitenFahrzeugDatenbank(user_input, id, con, stmt);
     }
 
-    public void bearbeitenKraftstoff(Console user_input, Connection con, Statement stmt) {
+    public static void bearbeitenKraftstoff(Console user_input, Connection con, Statement stmt) {
 
-        Datenbank datenbank = new Datenbank();
-        datenbank.bearbeitenKraftstoffDatenbank(user_input, con, stmt);
+        Datenbank.bearbeitenKraftstoffDatenbank(user_input, con, stmt);
     }
 
-    public void löschenFahrzeug(int id, Connection con, Statement stmt) {
+    public static void löschenFahrzeug(int id, Connection con, Statement stmt) {
 
-        Datenbank datenbank = new Datenbank();
-        datenbank.löschenFahrzeugDatenbank(id, con, stmt);
+        Datenbank.löschenFahrzeugDatenbank(id, con, stmt);
     }
 
-    public void exportieren(Console user_input, Connection con, Statement stmt) {
+    public static void exportieren(Console user_input, Connection con, Statement stmt) {
 
         System.out.println("Dateinamen wählen:");
         String name = user_input.readLine();
@@ -278,4 +255,5 @@ public class Main {
 //        System.out.println(new Ausgabe().autoAusgabe(auto));
 //        System.out.println("--------------------------------------------------------------------------------");
 //    }
+
 }

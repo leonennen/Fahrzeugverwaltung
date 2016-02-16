@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class Datenbank {
 
-    public void listeDatenbank(Connection con, Statement stmt) {
+    public static void listeDatenbank(Statement stmt) {
         try {
             ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge\n"
                     + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
@@ -29,7 +29,7 @@ public class Datenbank {
         }
     }
 
-    public void listeKraftstoffDatenbank(Connection con, Statement stmt) {
+    public static void listeKraftstoffDatenbank(Statement stmt) {
 
         try {
             ResultSet rs = stmt.executeQuery("SELECT * FROM Kraftstoffe");
@@ -47,7 +47,7 @@ public class Datenbank {
         }
     }
 
-    public void neuesFahrzeugDatenbank(Console user_input, Connection con, Statement stmt) {
+    public static void neuesFahrzeugDatenbank(Console user_input, Connection con, Statement stmt) {
 
         int id = 0;
         try {
@@ -183,7 +183,7 @@ public class Datenbank {
         }
     }
 
-    public void bearbeitenFahrzeugDatenbank(Console user_input, int id, Connection con, Statement stmt) {
+    public static void bearbeitenFahrzeugDatenbank(Console user_input, int id, Connection con, Statement stmt) {
 
         try {
             ResultSet rs;
@@ -316,7 +316,7 @@ public class Datenbank {
         }
     }
 
-    public void bearbeitenKraftstoffDatenbank(Console user_input, Connection con, Statement stmt) {
+    public static void bearbeitenKraftstoffDatenbank(Console user_input, Connection con, Statement stmt) {
 
         try {
             ResultSet rs = stmt.executeQuery("SELECT * FROM Kraftstoffe");
@@ -339,7 +339,7 @@ public class Datenbank {
         }
     }
 
-    public void anzeigenFahrzeugDatenbank(int id, Connection con, Statement stmt) {
+    public static void anzeigenFahrzeugDatenbank(int id, Connection con, Statement stmt) {
 
         try {
             ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge WHERE FAHRZEUGID = " + id);
@@ -366,7 +366,7 @@ public class Datenbank {
         }
     }
 
-    public void löschenFahrzeugDatenbank(int id, Connection con, Statement stmt) {
+    public static void löschenFahrzeugDatenbank(int id, Connection con, Statement stmt) {
 
         try {
             stmt.executeUpdate("DELETE FROM Fahrzeuge WHERE FAHRZEUGID = " + id);
