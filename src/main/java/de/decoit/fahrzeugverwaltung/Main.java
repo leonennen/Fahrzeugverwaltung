@@ -29,8 +29,8 @@ public class Main {
                 System.out.println("| Fahrzeug anzeigen:                  (03)  |");
                 System.out.println("| Fahrzeug bearbeiten:                (04)  |");
                 System.out.println("| Fahrzeug löschen:                   (05)  |");
-                System.out.println("| Treibstoffpreise anzeigen:          (06)  |");
-                System.out.println("| Treibstoffpreise bearbeiten:        (07)  |");
+                System.out.println("| Kraftstoffpreise anzeigen:          (06)  |");
+                System.out.println("| Kraftstoffpreise bearbeiten:        (07)  |");
                 System.out.println("| Fahrtkosten berechnen:              (08)  |");
                 System.out.println("| Sparsamstes Fahrzeug:               (09)  |");
                 System.out.println("| Exportieren:                        (10)  |");

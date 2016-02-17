@@ -143,10 +143,10 @@ public class Datenbank {
                 }
             } while (neukmstand == 0);
 
-            int neutreibstoff = 0;
+            int neukraftstoff = 0;
             do {
                 try {
-                    System.out.println("Treibstoffart:");
+                    System.out.println("Kraftstoffart:");
 
                     stmt = con.createStatement();
                     rs = stmt.executeQuery("SELECT * FROM Kraftstoffe");
@@ -157,19 +157,19 @@ public class Datenbank {
                         System.out.println(kraftstoffID + ": " + kraftstoff);
                     }
 
-                    neutreibstoff = Integer.parseInt(Helper.user_input.readLine());
+                    neukraftstoff = Integer.parseInt(Helper.user_input.readLine());
 
                 } catch (NumberFormatException ex) {
                     System.out.println("Kein gültiger Treibstoff!");
                     System.out.println(ex.getMessage());
                 }
-            } while (neutreibstoff == 0);
+            } while (neukraftstoff == 0);
 
             stmt = con.createStatement();
             stmt.executeUpdate("INSERT INTO Fahrzeuge VALUES (" + id + ",'"
                     + neubesitzer + "', '" + neumarke + "', '" + neutyp + "', "
                     + neuverbrauch + ", " + neuleistung + ", "
-                    + neukmstand + ", " + neutreibstoff + ", " + neuklasse + ")");
+                    + neukmstand + ", " + neukraftstoff + ", " + neuklasse + ")");
 
             stmt.close();
 
@@ -275,7 +275,7 @@ public class Datenbank {
                 }
             } while (neukmstand == 0);
 
-            int neutreibstoff = 0;
+            int neukraftstoff = 0;
             do {
                 try {
                     System.out.println("Treibstoffart:");
@@ -289,19 +289,19 @@ public class Datenbank {
                         System.out.println(kraftstoffID + ": " + kraftstoff);
                     }
 
-                    neutreibstoff = Integer.parseInt(Helper.user_input.readLine());
+                    neukraftstoff = Integer.parseInt(Helper.user_input.readLine());
 
                 } catch (NumberFormatException ex) {
                     System.out.println("Kein gültiger Treibstoff!");
                     System.out.println(ex.getMessage());
                 }
-            } while (neutreibstoff == 0);
+            } while (neukraftstoff == 0);
 
             stmt = con.createStatement();
             stmt.executeUpdate("UPDATE Fahrzeuge SET Besitzer = '" + neubesitzer
                     + "', Marke = '" + neumarke + "', Typ = '" + neutyp
                     + "', Verbrauch = " + neuverbrauch + ", Leistung = " + neuleistung
-                    + ", Kilometerstand = " + neukmstand + ", Kraftstoff = " + neutreibstoff
+                    + ", Kilometerstand = " + neukmstand + ", Kraftstoff = " + neukraftstoff
                     + ", Klasse = " + neuklasse + " WHERE FahrzeugID = " + id);
 
             stmt.close();
