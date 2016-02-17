@@ -97,6 +97,7 @@ public class Main {
                         Helper.user_input.readLine();
                         break;
                     case "9":
+                        sparsamstesFahrzeug();
                         Helper.user_input.readLine();
                         break;
                     case "10":
@@ -156,8 +157,13 @@ public class Main {
                     id = Integer.parseInt(Helper.user_input.readLine());
                     System.out.println("Für welche Strecke in Kilometern?");
                     strecke = Integer.parseInt(Helper.user_input.readLine());
-                } catch (NumberFormatException ex) {
-                    System.out.println(ex);
+                    if (strecke <= 0) {
+                        strecke = 0;
+                        throw new IllegalStateException("Bitte eine Strecke größer 0 eingeben!");
+                    }
+                } catch (NumberFormatException | IllegalStateException ex) {
+                    System.out.println("Keine gültige Zahl!");
+                    System.out.println(ex.getMessage());
                 }
             } while (id == 0);
 
@@ -167,51 +173,58 @@ public class Main {
                     + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF\n"
                     + "WHERE FAHRZEUGID = " + id);
             rs.next();
-            
+
             double preis = rs.getDouble("Preis");
+            double verbrauch = rs.getDouble("Verbrauch");
+            double kosten = ((Verschleißwerte.verschleiß(id, strecke) + strecke) * verbrauch / 100) * preis;
+            stmt.close();
 
-            double kosten = (Verschleißwerte.verschleiß(id, strecke) + strecke) * preis;
-
-            System.out.println(
-                    "--------------------------------------------------------------------------------");
-            System.out.println(
-                    "Für eine Strecke von " + strecke + "km, betragen die Kosten " + kosten + "€.");
-            System.out.println(
-                    "--------------------------------------------------------------------------------");
+            System.out.println("Für eine Strecke von " + strecke + "km, betragen die Kosten " + kosten + "€.");
         } catch (SQLException ex) {
             System.out.println(ex);
         }
     }
-//    public void sparsamstesFahrzeug(Console user_input, ArrayList<KFZ> autoListe, Treibstoffpreise treibstoffpreise) {
-//
-//        System.out.println("Für welche Strecke in Kilometern?");
-//        int strecke = 0;
-//        do {
-//            try {
-//
-//                strecke = Integer.parseInt(user_input.readLine());
-//
-//                if (strecke <= 0) {
-//                    strecke = 0;
-//                    throw new IllegalStateException("Bitte eine Strecke größer 0 eingeben!");
-//                }
-//
-//            } catch (Exception ex) {
-//                System.out.println("Keine gültige Zahl!");
-//                System.out.println(ex.getMessage());
-//            }
-//        } while (strecke == 0);
-//
-//        KFZ auto = Sparsamkeit.sparsamkeit(autoListe, treibstoffpreise, strecke);
-//        double preis = treibstoffpreise.preis(auto);
-//        double kosten = auto.kosten(strecke + Verschleißwerte.verschleiß(auto, strecke), preis);
-//
-//        System.out.println("--------------------------------------------------------------------------------");
-//        System.out.println("Das günstigste Auto für eine Strecke von " + strecke + "km,");
-//        System.out.println("ist der Wagen von " + auto.getBesitzer() + ", ");
-//        System.out.println("es entstehen Kosten in Höhe von " + kosten + "€.");
-//        System.out.println(new Ausgabe().autoAusgabe(auto));
-//        System.out.println("--------------------------------------------------------------------------------");
-//    }
+
+    public static void sparsamstesFahrzeug() {
+        try {
+            int strecke = 0;
+            int id;
+            do {
+                try {
+                    System.out.println("Für welche Strecke in Kilometern?");
+                    strecke = Integer.parseInt(Helper.user_input.readLine());
+
+                    if (strecke <= 0) {
+                        strecke = 0;
+                        throw new IllegalStateException("Bitte eine Strecke größer 0 eingeben!");
+                    }
+
+                } catch (NumberFormatException | IllegalStateException ex) {
+                    System.out.println("Keine gültige Zahl!");
+                    System.out.println(ex.getMessage());
+                }
+            } while (strecke == 0);
+
+            id = Sparsamkeit.sparsamkeit(strecke);
+
+            stmt = Datenbank.con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge\n"
+                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
+                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF\n"
+                    + "WHERE FAHRZEUGID = " + id);
+            rs.next();
+
+            double preis = rs.getDouble("Preis");
+            double kosten = (Verschleißwerte.verschleiß(id, strecke) + strecke) * preis;
+            stmt.close();
+
+            System.out.println("Das günstigste Auto für eine Strecke von " + strecke + "km,");
+            System.out.println("ist der Wagen von " + rs.getString("Besitzer") + ", ");
+            System.out.println("es entstehen Kosten in Höhe von " + kosten + "€.");
+            Datenbank.anzeigenFahrzeugDatenbank(id);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }
 
 }

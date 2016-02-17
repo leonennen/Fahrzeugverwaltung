@@ -38,9 +38,9 @@ public class Datenbank {
                 double preis = rs.getDouble("Preis");
 
                 System.out.println(art + ": " + preis + "€");
-                stmt.close();
             }
 
+            stmt.close();
         } catch (SQLException e) {
             System.err.println(e);
         }
@@ -48,7 +48,7 @@ public class Datenbank {
 
     public static void neuesFahrzeugDatenbank() {
 
-        int id = 0;
+        int id;
         try {
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT MAX(FAHRZEUGID) FROM Fahrzeuge");
@@ -343,7 +343,10 @@ public class Datenbank {
 
         try {
             stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge WHERE FAHRZEUGID = " + id);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge\n"
+                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
+                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF\n"
+                    + "WHERE FAHRZEUGID = " + id);
 
             rs.next();
 
@@ -353,7 +356,7 @@ public class Datenbank {
             double verbrauch = rs.getDouble("Verbrauch");
             int leistung = rs.getInt("Leistung");
             int kmstand = rs.getInt("Kilometerstand");
-            int treibstoff = rs.getInt("Kraftstoff");
+            String treibstoff = rs.getString("Kraftstoffart");
             int klasse = rs.getInt("Klasse");
 
             System.out.println("ID: " + id + ", Besitzer: " + besitzer + ", Fahrzeug: "
