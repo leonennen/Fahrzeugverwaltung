@@ -5,6 +5,7 @@ import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportInterface;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class CsvExport implements ExportInterface {
 
@@ -18,17 +19,18 @@ public class CsvExport implements ExportInterface {
 
         try (PrintStream out = new PrintStream(new FileOutputStream(pfad.pfad() + dateiname.dateiname(name)))) {
 
-            ResultSet rs = Datenbank.stmt.executeQuery("SELECT * FROM Fahrzeuge\n"
+            Statement stmtcsv = Datenbank.con.createStatement();
+            ResultSet csv = stmtcsv.executeQuery("SELECT * FROM Fahrzeuge\n"
                     + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
                     + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF");
 
-            while (rs.next()) {
+            while (csv.next()) {
 
-                export = export + rs.getInt("FahrzeugID") + "," + rs.getString("Besitzer") + ","
-                        + rs.getString("Marke") + "," + rs.getString("Typ") + ","
-                        + rs.getString("Fahrzeugklasse") + "," + rs.getDouble("Verbrauch") + ","
-                        + rs.getInt("Leistung") + "," + rs.getInt("Kilometerstand") + ","
-                        + rs.getString("Kraftstoffart") + "\n";
+                export = export + csv.getInt("FahrzeugID") + "," + csv.getString("Besitzer") + ","
+                        + csv.getString("Marke") + "," + csv.getString("Typ") + ","
+                        + csv.getString("Fahrzeugklasse") + "," + csv.getDouble("Verbrauch") + ","
+                        + csv.getInt("Leistung") + "," + csv.getInt("Kilometerstand") + ","
+                        + csv.getString("Kraftstoffart") + "\n";
 
             }
 

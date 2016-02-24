@@ -1,7 +1,7 @@
 package de.decoit.fahrzeugverwaltung;
 
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank;
-import static de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank.stmt;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -12,18 +12,19 @@ public class Verschleißwerte {
         double verschleißwert = 0;
 
         try {
-            stmt = Datenbank.con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge\n"
-                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
-                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF\n"
-                    + "WHERE FAHRZEUGID = " + id);
-            rs.next();
+            PreparedStatement prestmtverschleiss = Datenbank.con.prepareStatement("SELECT * FROM KFZ.FAHRZEUGE\n"
+                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.ID = KFZ.FAHRZEUGE.KLASSEN_ID\n"
+                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.ID = KFZ.FAHRZEUGE.KRAFTSTOFF_ID\n"
+                    + "WHERE FAHRZEUG_ID = ?");
+            prestmtverschleiss.setLong(1, id);
+            ResultSet verschleiss = prestmtverschleiss.executeQuery();
+            verschleiss.next();
 
-            int kmstand = rs.getInt("Kilometerstand");
+            int kmstand = verschleiss.getInt("Kilometerstand");
             double streckenkorrektur = 1 + (kmstand / 500000);
 
             try {
-                switch (rs.getInt("Klasse")) {
+                switch (verschleiss.getInt("Klasse")) {
                     case 1:
                         verschleißwert = strecke - 20;
                         if (strecke < 40) {

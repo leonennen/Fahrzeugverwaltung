@@ -1,9 +1,9 @@
 package de.decoit.fahrzeugverwaltung;
 
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank;
-import static de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank.stmt;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Sparsamkeit {
 
@@ -17,7 +17,7 @@ public class Sparsamkeit {
         double verbrauch;
 
         try {
-            stmt = Datenbank.con.createStatement();
+            Statement stmt = Datenbank.con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge\n"
                     + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
                     + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF");

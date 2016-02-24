@@ -2,7 +2,7 @@ package de.decoit.fahrzeugverwaltung;
 
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datei;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank;
-import static de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank.stmt;
+import static de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank.con;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportAuswahl;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportInterface;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Helper;
@@ -17,109 +17,101 @@ public class Main {
 
     public Main() {
 
-        try {
+        do {
 
-            do {
+            System.out.println("---------------------------------------------");
+            System.out.println("| FAHRZEUGVERWALTUNG:                       |");
+            System.out.println("---------------------------------------------");
+            System.out.println("| Neues Fahrzeug hinzufügen:          (01)  |");
+            System.out.println("| Liste anzeigen:                     (02)  |");
+            System.out.println("| Fahrzeug anzeigen:                  (03)  |");
+            System.out.println("| Fahrzeug bearbeiten:                (04)  |");
+            System.out.println("| Fahrzeug löschen:                   (05)  |");
+            System.out.println("| Kraftstoffpreise anzeigen:          (06)  |");
+            System.out.println("| Kraftstoffpreise bearbeiten:        (07)  |");
+            System.out.println("| Fahrtkosten berechnen:              (08)  |");
+            System.out.println("| Sparsamstes Fahrzeug:               (09)  |");
+            System.out.println("| Exportieren:                        (10)  |");
+            System.out.println("| Beenden:                            (11)  |");
+            System.out.println("---------------------------------------------");
 
-                System.out.println("---------------------------------------------");
-                System.out.println("| FAHRZEUGVERWALTUNG:                       |");
-                System.out.println("---------------------------------------------");
-                System.out.println("| Neues Fahrzeug hinzufügen:          (01)  |");
-                System.out.println("| Liste anzeigen:                     (02)  |");
-                System.out.println("| Fahrzeug anzeigen:                  (03)  |");
-                System.out.println("| Fahrzeug bearbeiten:                (04)  |");
-                System.out.println("| Fahrzeug löschen:                   (05)  |");
-                System.out.println("| Kraftstoffpreise anzeigen:          (06)  |");
-                System.out.println("| Kraftstoffpreise bearbeiten:        (07)  |");
-                System.out.println("| Fahrtkosten berechnen:              (08)  |");
-                System.out.println("| Sparsamstes Fahrzeug:               (09)  |");
-                System.out.println("| Exportieren:                        (10)  |");
-                System.out.println("| Beenden:                            (11)  |");
-                System.out.println("---------------------------------------------");
+            String input = Helper.user_input.readLine();
 
-                String input = Helper.user_input.readLine();
+            switch (input) {
+                case "1":
+                    Datenbank.neuesFahrzeugDatenbank();
+                    break;
+                case "2":
+                    Datenbank.listeDatenbank();
+                    Helper.user_input.readLine();
+                    break;
+                case "3":
+                    Datenbank.listeDatenbank();
+                    try {
+                        System.out.println("FahrzeugID?");
+                        int id = Integer.parseInt(Helper.user_input.readLine());
+                        Datenbank.anzeigenFahrzeugDatenbank(id);
 
-                switch (input) {
-                    case "1":
-                        Datenbank.neuesFahrzeugDatenbank();
-                        break;
-                    case "2":
-                        Datenbank.listeDatenbank();
-                        Helper.user_input.readLine();
-                        break;
-                    case "3":
-                        Datenbank.listeDatenbank();
-                        try {
-                            System.out.println("FahrzeugID?");
-                            int id = Integer.parseInt(Helper.user_input.readLine());
-                            Datenbank.anzeigenFahrzeugDatenbank(id);
+                    } catch (Exception ex) {
+                        System.out.println("Keine gültige FahrzeugID!");
+                        System.out.println(ex.getMessage());
+                    }
+                    Helper.user_input.readLine();
+                    break;
+                case "4":
+                    Datenbank.listeDatenbank();
+                    try {
+                        System.out.println("FahrzeugID?");
+                        int id = Integer.parseInt(Helper.user_input.readLine());
+                        Datenbank.bearbeitenFahrzeugDatenbank(id);
 
-                        } catch (Exception ex) {
-                            System.out.println("Keine gültige FahrzeugID!");
-                            System.out.println(ex.getMessage());
-                        }
-                        Helper.user_input.readLine();
-                        break;
-                    case "4":
-                        Datenbank.listeDatenbank();
-                        try {
-                            System.out.println("FahrzeugID?");
-                            int id = Integer.parseInt(Helper.user_input.readLine());
-                            Datenbank.bearbeitenFahrzeugDatenbank(id);
+                    } catch (Exception ex) {
+                        System.out.println("Keine gültige FahrzeugID!");
+                        System.out.println(ex.getMessage());
+                    }
+                    break;
+                case "5":
+                    Datenbank.listeDatenbank();
+                    try {
+                        System.out.println("FahrzeugID?");
+                        int id = Integer.parseInt(Helper.user_input.readLine());
+                        Datenbank.löschenFahrzeugDatenbank(id);
 
-                        } catch (Exception ex) {
-                            System.out.println("Keine gültige FahrzeugID!");
-                            System.out.println(ex.getMessage());
-                        }
-                        break;
-                    case "5":
-                        Datenbank.listeDatenbank();
-                        try {
-                            System.out.println("FahrzeugID?");
-                            int id = Integer.parseInt(Helper.user_input.readLine());
-                            Datenbank.löschenFahrzeugDatenbank(id);
+                    } catch (Exception ex) {
+                        System.out.println("Keine gültige FahrzeugID!");
+                        System.out.println(ex.getMessage());
+                    }
+                    break;
+                case "6":
+                    Datenbank.listeKraftstoffDatenbank();
+                    Helper.user_input.readLine();
+                    break;
+                case "7":
+                    Datenbank.bearbeitenKraftstoffDatenbank();
+                    break;
+                case "8":
+                    Datenbank.listeDatenbank();
+                    spritVerbrauch();
+                    Helper.user_input.readLine();
+                    break;
+                case "9":
+                    sparsamstesFahrzeug();
+                    Helper.user_input.readLine();
+                    break;
+                case "10":
+                    exportieren();
+                    Helper.user_input.readLine();
+                    break;
+                case "11":
+                    System.out.println("Wird beendet!");
+                    System.exit(0);
+                default:
+                    System.out.println("Falsche Eingabe!!!");
+                    break;
+            }
 
-                        } catch (Exception ex) {
-                            System.out.println("Keine gültige FahrzeugID!");
-                            System.out.println(ex.getMessage());
-                        }
-                        break;
-                    case "6":
-                        Datenbank.listeKraftstoffDatenbank();
-                        Helper.user_input.readLine();
-                        break;
-                    case "7":
-                        Datenbank.bearbeitenKraftstoffDatenbank();
-                        break;
-                    case "8":
-                        Datenbank.listeDatenbank();
-                        spritVerbrauch();
-                        Helper.user_input.readLine();
-                        break;
-                    case "9":
-                        sparsamstesFahrzeug();
-                        Helper.user_input.readLine();
-                        break;
-                    case "10":
-                        exportieren();
-                        Helper.user_input.readLine();
-                        break;
-                    case "11":
-                        System.out.println("Wird beendet!");
-                        System.exit(0);
-                    default:
-                        System.out.println("Falsche Eingabe!!!");
-                        break;
-                }
+        } while (true);
 
-                Datenbank.stmt.close();
-
-            } while (true);
-
-        } catch (SQLException e) {
-
-            System.err.println(e);
-        }
     }
 
     public static void exportieren() {
@@ -167,17 +159,17 @@ public class Main {
                 }
             } while (id == 0);
 
-            stmt = Datenbank.con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge\n"
-                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
-                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF\n"
-                    + "WHERE FAHRZEUGID = " + id);
-            rs.next();
+            PreparedStatement prestmtverbrauch = Datenbank.con.prepareStatement("SELECT * FROM KFZ.FAHRZEUGE\n"
+                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.ID = KFZ.FAHRZEUGE.KLASSEN_ID\n"
+                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.ID = KFZ.FAHRZEUGE.KRAFTSTOFF_ID\n"
+                    + "WHERE FAHRZEUG_ID = ?");
+            prestmtverbrauch.setLong(1, id);
+            ResultSet rsverbrauch = prestmtverbrauch.executeQuery();
+            rsverbrauch.next();
 
-            double preis = rs.getDouble("Preis");
-            double verbrauch = rs.getDouble("Verbrauch");
+            double preis = rsverbrauch.getDouble("Preis");
+            double verbrauch = rsverbrauch.getDouble("Verbrauch");
             double kosten = ((Verschleißwerte.verschleiß(id, strecke) + strecke) * verbrauch / 100) * preis;
-            stmt.close();
 
             System.out.println("Für eine Strecke von " + strecke + "km, betragen die Kosten " + kosten + "€.");
         } catch (SQLException ex) {
@@ -207,21 +199,24 @@ public class Main {
 
             id = Sparsamkeit.sparsamkeit(strecke);
 
-            stmt = Datenbank.con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Fahrzeuge\n"
-                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
-                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF\n"
-                    + "WHERE FAHRZEUGID = " + id);
-            rs.next();
+            PreparedStatement prestmtfahrzeug = con.prepareStatement("SELECT * FROM KFZ.FAHRZEUGE\n"
+                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.ID = KFZ.FAHRZEUGE.KLASSEN_ID\n"
+                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.ID = KFZ.FAHRZEUGE.KRAFTSTOFF_ID\n"
+                    + "WHERE FAHRZEUG_ID = ?");
+            prestmtfahrzeug.setLong(1, id);
+            ResultSet fahrzeug = prestmtfahrzeug.executeQuery();
+            fahrzeug.next();
 
-            double preis = rs.getDouble("Preis");
+            double preis = fahrzeug.getDouble("Preis");
             double kosten = (Verschleißwerte.verschleiß(id, strecke) + strecke) * preis;
-            stmt.close();
 
             System.out.println("Das günstigste Auto für eine Strecke von " + strecke + "km,");
-            System.out.println("ist der Wagen von " + rs.getString("Besitzer") + ", ");
+            System.out.println("ist der Wagen von " + fahrzeug.getString("Besitzer") + ", ");
             System.out.println("es entstehen Kosten in Höhe von " + kosten + "€.");
+            
             Datenbank.anzeigenFahrzeugDatenbank(id);
+            
+            prestmtfahrzeug.close();
         } catch (SQLException ex) {
             System.out.println(ex);
         }
