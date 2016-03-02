@@ -1,10 +1,13 @@
 package de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe;
 
+import de.decoit.fahrzeugverwaltung.subKlassen.Fahrzeug;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Datenbank {
 
     public static void listeDatenbank() {
+
         try {
             Statement stmtliste = con.createStatement();
             ResultSet rs = stmtliste.executeQuery("SELECT * FROM KFZ.FAHRZEUGE\n"
@@ -26,6 +29,15 @@ public class Datenbank {
             System.err.println(e);
         }
     }
+
+//    public static void listeDatenbank2() {
+//
+//        ArrayList<Fahrzeug> fahrzeuge = new ArrayList<>();
+//        fahrzeuge = DatenbankAbfrage.abfrageFahrzeugListe();
+//
+//        while (fahrzeuge : o){
+//    }
+//    }
 
     public static void listeKraftstoffDatenbank() {
 
@@ -373,7 +385,7 @@ public class Datenbank {
                     + kmstand + "km, Antrieb: " + kraftstoff);
 
             prestmtfahrzeug.close();
-            
+
         } catch (SQLException e) {
             System.err.println(e);
         }
