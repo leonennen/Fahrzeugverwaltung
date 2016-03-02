@@ -2,6 +2,7 @@ package de.decoit.fahrzeugverwaltung;
 
 public class Fahrzeug {
 
+    private int id;
     private String besitzer;
     private String marke;
     private String typ;
@@ -10,6 +11,14 @@ public class Fahrzeug {
     private int kmstand;
     private int kraftstoff;
     private int klasse;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getBesitzer() {
         return besitzer;

@@ -49,6 +49,7 @@ public class DatenbankAbfrage {
 
         Fahrzeug fahrzeug = new Fahrzeug();
 
+        fahrzeug.setId(rsfahrzeug.getInt("FAHRZEUG_ID"));
         fahrzeug.setBesitzer(rsfahrzeug.getString("BESITZER"));
         fahrzeug.setMarke(rsfahrzeug.getString("MARKE"));
         fahrzeug.setTyp(rsfahrzeug.getString("TYP"));
