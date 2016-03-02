@@ -1,1 +1,14 @@
-Wed Feb 24 09:55:54 CET 2016 : Apache Derby Network Server 10.12.1.1 - (1704137) wurde gestartet und ist bereit, Verbindungen auf Port 1527 zu akzeptieren.
+Wed Mar 02 09:16:51 CET 2016 : Apache Derby Network Server 10.12.1.1 - (1704137) wurde gestartet und ist bereit, Verbindungen auf Port 1527 zu akzeptieren.
+----------------------------------------------------------------
+Wed Mar 02 09:17:02 CET 2016:
+Booten von Derby-Version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): Instanz a816c00e-0153-3666-a88e-ffffc0b07074
+für Datenbankverzeichnis /home/leon/NetBeansProjects/Fahrzeugverwaltung/Fahrzeugverwaltung mit Class Loader sun.misc.Launcher$AppClassLoader@347cdb
+Geladen aus file:/home/leon/db-derby-10.12.1.1-bin/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_95-b00
+user.dir=/home/leon/db-derby-10.12.1.1-bin
+os.name=Linux
+os.arch=amd64
+os.version=3.13.0-37-generic
+derby.system.home=/home/leon/NetBeansProjects/Fahrzeugverwaltung
+Datenbank-Class Loader wurde gestartet - derby.database.classpath=''

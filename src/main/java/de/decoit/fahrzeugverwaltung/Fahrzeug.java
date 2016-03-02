@@ -2,22 +2,78 @@ package de.decoit.fahrzeugverwaltung;
 
 public class Fahrzeug {
 
-    public String besitzer;
-    public String marke;
-    public String typ;
-    public double verbrauch;
-    public int leistung;
-    public int kmstand;
+    private String besitzer;
+    private String marke;
+    private String typ;
+    private double verbrauch;
+    private int leistung;
+    private int kmstand;
+    private int kraftstoff;
+    private int klasse;
 
-    public Fahrzeug(String besitzer, String marke, String typ, double verbrauch, int leistung, int kmstand) {
-
-        this.besitzer = besitzer;
-        this.marke = marke;
-        this.typ = typ;
-        this.verbrauch = verbrauch;
-        this.leistung = leistung;
-        this.kmstand = kmstand;
-
+    public String getBesitzer() {
+        return besitzer;
     }
+
+    public void setBesitzer(String besitzer) {
+        this.besitzer = besitzer;
+    }
+
+    public String getMarke() {
+        return marke;
+    }
+
+    public void setMarke(String marke) {
+        this.marke = marke;
+    }
+
+    public String getTyp() {
+        return typ;
+    }
+
+    public void setTyp(String typ) {
+        this.typ = typ;
+    }
+
+    public double getVerbrauch() {
+        return verbrauch;
+    }
+
+    public void setVerbrauch(double verbrauch) {
+        this.verbrauch = verbrauch;
+    }
+
+    public int getLeistung() {
+        return leistung;
+    }
+
+    public void setLeistung(int leistung) {
+        this.leistung = leistung;
+    }
+
+    public int getKmstand() {
+        return kmstand;
+    }
+
+    public void setKmstand(int kmstand) {
+        this.kmstand = kmstand;
+    }
+
+    public int getKraftstoff() {
+        return kraftstoff;
+    }
+
+    public void setKraftstoff(int kraftstoff) {
+        this.kraftstoff = kraftstoff;
+    }
+
+    public int getKlasse() {
+        return klasse;
+    }
+
+    public void setKlasse(int klasse) {
+        this.klasse = klasse;
+    }
+
 
 }
