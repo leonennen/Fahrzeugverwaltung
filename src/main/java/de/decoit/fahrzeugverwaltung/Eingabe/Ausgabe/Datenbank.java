@@ -1,8 +1,6 @@
 package de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe;
 
-import de.decoit.fahrzeugverwaltung.subKlassen.Fahrzeug;
 import java.sql.*;
-import java.util.ArrayList;
 
 public class Datenbank {
 
@@ -35,7 +33,7 @@ public class Datenbank {
 //        ArrayList<Fahrzeug> fahrzeuge = new ArrayList<>();
 //        fahrzeuge = DatenbankAbfrage.abfrageFahrzeugListe();
 //
-//        while (fahrzeuge : o){
+//        while(Fahrzeug o : fahrzeuge){
 //    }
 //    }
 
