@@ -134,7 +134,7 @@ public class DatenbankAbfrage {
     public static Klasse abfrageKlasse(int id) {
 
         try {
-            PreparedStatement prestmtklasse = con.prepareStatement("SELECT * FROM KFZ.KLASSE WHERE ID = ?");
+            PreparedStatement prestmtklasse = con.prepareStatement("SELECT * FROM KFZ.KLASSEN WHERE ID = ?");
             prestmtklasse.setLong(1, id);
             ResultSet rsklasse = prestmtklasse.executeQuery();
 

@@ -1,58 +1,43 @@
 package de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe;
 
+import de.decoit.fahrzeugverwaltung.subKlassen.Fahrzeug;
+import de.decoit.fahrzeugverwaltung.subKlassen.Kraftstoff;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Datenbank {
 
     public static void listeDatenbank() {
 
+        ArrayList<Fahrzeug> fahrzeuge = DatenbankAbfrage.abfrageFahrzeugListe();
+
         try {
-            Statement stmtliste = con.createStatement();
-            ResultSet rs = stmtliste.executeQuery("SELECT * FROM KFZ.FAHRZEUGE\n"
-                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.ID = KFZ.FAHRZEUGE.KLASSEN_ID\n"
-                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.ID = KFZ.FAHRZEUGE.KRAFTSTOFF_ID\n");
-            while (rs.next()) {
-                int id = rs.getInt("FAHRZEUG_ID");
-                String besitzer = rs.getString("BESITZER");
-                String marke = rs.getString("MARKE");
-                String typ = rs.getString("TYP");
-                String klasse = rs.getString("KLASSE");
-                String kraftstoff = rs.getString("KRAFTSTOFF");
+            for (Fahrzeug o : fahrzeuge) {
 
-                System.out.println("ID: " + id + ", Besitzer: " + besitzer + ", Fahrzeug: "
-                        + marke + " " + typ + ", " + klasse + ", Antrieb: " + kraftstoff);
+                System.out.println("ID: " + o.getId() + ", Besitzer: " + o.getBesitzer()
+                        + ", Fahrzeug: " + o.getMarke() + " " + o.getTyp() + ", "
+                        + DatenbankAbfrage.abfrageKlasse(o.getKlasse()).getKlasse()
+                        + ", Antrieb: " + DatenbankAbfrage.abfrageKraftstoff(o.getKraftstoff()).getKraftstoff());
             }
-            stmtliste.close();
-        } catch (SQLException e) {
-            System.err.println(e);
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
-    }
 
-//    public static void listeDatenbank2() {
-//
-//        ArrayList<Fahrzeug> fahrzeuge = new ArrayList<>();
-//        fahrzeuge = DatenbankAbfrage.abfrageFahrzeugListe();
-//
-//        while(Fahrzeug o : fahrzeuge){
-//    }
-//    }
+    }
 
     public static void listeKraftstoffDatenbank() {
 
+        ArrayList<Kraftstoff> kraftstoffe = DatenbankAbfrage.abfrageKraftstoffListe();
+
         try {
-            Statement stmtlistekraftstoff = con.createStatement();
-            ResultSet rs = stmtlistekraftstoff.executeQuery("SELECT * FROM KRAFTSTOFFE");
+            for (Kraftstoff o : kraftstoffe) {
 
-            while (rs.next()) {
-                String art = rs.getString("KRAFTSTOFF");
-                double preis = rs.getDouble("PREIS");
+                System.out.println(o.getKraftstoff() + ": " + o.getPreis() + "€");
 
-                System.out.println(art + ": " + preis + "€");
             }
 
-            stmtlistekraftstoff.close();
-        } catch (SQLException e) {
-            System.err.println(e);
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
     }
 
@@ -176,7 +161,7 @@ public class Datenbank {
 
             PreparedStatement prestmtneu = con.prepareStatement("INSERT INTO FAHRZEUGE (BESITZER, "
                     + "MARKE, TYP, VERBRAUCH, LEISTUNG, KILOMETERSTAND, "
-                    + "KRAFTSTOFF_ID, KLASSEN_ID) VALUES ('?', '?', '?', ?, ?, ?, ?, ?)");
+                    + "KRAFTSTOFF_ID, KLASSEN_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             prestmtneu.setString(1, neubesitzer);
             prestmtneu.setString(2, neumarke);
             prestmtneu.setString(3, neutyp);
@@ -185,6 +170,7 @@ public class Datenbank {
             prestmtneu.setInt(6, neukmstand);
             prestmtneu.setInt(7, neukraftstoff);
             prestmtneu.setInt(8, neuklasse);
+            prestmtneu.executeUpdate();
 
             System.out.println("Eintrag erstellt!");
             listeDatenbank();
@@ -322,6 +308,7 @@ public class Datenbank {
             prestmtbearbeiten.setInt(7, neukraftstoff);
             prestmtbearbeiten.setInt(8, neuklasse);
             prestmtbearbeiten.setLong(9, id);
+            prestmtbearbeiten.executeUpdate();
 
             System.out.println("Eintrag bearbeitet!");
 
@@ -358,35 +345,14 @@ public class Datenbank {
 
     public static void anzeigenFahrzeugDatenbank(int id) {
 
-        try {
-            PreparedStatement prestmtfahrzeug = con.prepareStatement("SELECT * FROM KFZ.FAHRZEUGE\n"
-                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.ID = KFZ.FAHRZEUGE.KLASSEN_ID\n"
-                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.ID = KFZ.FAHRZEUGE.KRAFTSTOFF_ID\n"
-                    + "WHERE FAHRZEUG_ID = ?");
-            prestmtfahrzeug.setLong(1, id);
-            ResultSet fahrzeug = prestmtfahrzeug.executeQuery();
-            fahrzeug.next();
+        Fahrzeug fahrzeug = DatenbankAbfrage.abfrageFahrzeug(id);
+        System.out.println("ID: " + fahrzeug.getId() + ", Besitzer: " + fahrzeug.getBesitzer()
+                + ", Fahrzeug: " + fahrzeug.getMarke() + " " + fahrzeug.getTyp() + ", "
+                + "Verbrauch: " + fahrzeug.getVerbrauch() + ", Leistung: " + fahrzeug.getLeistung()
+                + ", Kilometerstand: " + fahrzeug.getKmstand() + ", "
+                + DatenbankAbfrage.abfrageKlasse(fahrzeug.getKlasse()).getKlasse()
+                + ", Antrieb: " + DatenbankAbfrage.abfrageKraftstoff(fahrzeug.getKraftstoff()).getKraftstoff());
 
-            String besitzer = fahrzeug.getString("BESITZER");
-            String marke = fahrzeug.getString("MARKE");
-            String typ = fahrzeug.getString("TYP");
-            double verbrauch = fahrzeug.getDouble("VERBRAUCH");
-            int leistung = fahrzeug.getInt("LEISTUNG");
-            int kmstand = fahrzeug.getInt("KILOMETERSTAND");
-            String kraftstoff = fahrzeug.getString("KRAFTSTOFF");
-            String klasse = fahrzeug.getString("KLASSE");
-
-            System.out.println("ID: " + id + ", Besitzer: " + besitzer + ", Fahrzeug: "
-                    + marke + " " + typ + ", Klasse: " + klasse
-                    + ", \nVerbrauch: " + verbrauch
-                    + "l/100km, Leistung: " + leistung + "kW, Kmstand: "
-                    + kmstand + "km, Antrieb: " + kraftstoff);
-
-            prestmtfahrzeug.close();
-
-        } catch (SQLException e) {
-            System.err.println(e);
-        }
     }
 
     public static void löschenFahrzeugDatenbank(int id) {

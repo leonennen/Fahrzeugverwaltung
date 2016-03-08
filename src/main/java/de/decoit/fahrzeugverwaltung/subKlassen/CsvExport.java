@@ -1,11 +1,10 @@
 package de.decoit.fahrzeugverwaltung.subKlassen;
 
-import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank;
+import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.DatenbankAbfrage;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportInterface;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.util.ArrayList;
 
 public class CsvExport implements ExportInterface {
 
@@ -19,18 +18,15 @@ public class CsvExport implements ExportInterface {
 
         try (PrintStream out = new PrintStream(new FileOutputStream(pfad.pfad() + dateiname.dateiname(name)))) {
 
-            Statement stmtcsv = Datenbank.con.createStatement();
-            ResultSet csv = stmtcsv.executeQuery("SELECT * FROM Fahrzeuge\n"
-                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
-                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF");
+            ArrayList<Fahrzeug> fahrzeuge = DatenbankAbfrage.abfrageFahrzeugListe();
 
-            while (csv.next()) {
+            for (Fahrzeug csv : fahrzeuge) {
 
-                export = export + csv.getInt("FahrzeugID") + "," + csv.getString("Besitzer") + ","
-                        + csv.getString("Marke") + "," + csv.getString("Typ") + ","
-                        + csv.getString("Fahrzeugklasse") + "," + csv.getDouble("Verbrauch") + ","
-                        + csv.getInt("Leistung") + "," + csv.getInt("Kilometerstand") + ","
-                        + csv.getString("Kraftstoffart") + "\n";
+                export = export + csv.getId() + "," + csv.getBesitzer() + ","
+                        + csv.getMarke() + "," + csv.getTyp() + ","
+                        + DatenbankAbfrage.abfrageKlasse(csv.getKlasse()).getKlasse() + "," + csv.getVerbrauch() + ","
+                        + csv.getLeistung() + "," + csv.getKmstand() + ","
+                        + DatenbankAbfrage.abfrageKraftstoff(csv.getKraftstoff()).getKraftstoff() + "\n";
 
             }
 

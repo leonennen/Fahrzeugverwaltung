@@ -2,11 +2,12 @@ package de.decoit.fahrzeugverwaltung;
 
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datei;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank;
-import static de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank.con;
+import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.DatenbankAbfrage;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportAuswahl;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportInterface;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Helper;
-import java.sql.*;
+import de.decoit.fahrzeugverwaltung.subKlassen.Fahrzeug;
+import de.decoit.fahrzeugverwaltung.subKlassen.Kraftstoff;
 
 public class Main {
 
@@ -159,20 +160,15 @@ public class Main {
                 }
             } while (id == 0);
 
-            PreparedStatement prestmtverbrauch = Datenbank.con.prepareStatement("SELECT * FROM KFZ.FAHRZEUGE\n"
-                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.ID = KFZ.FAHRZEUGE.KLASSEN_ID\n"
-                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.ID = KFZ.FAHRZEUGE.KRAFTSTOFF_ID\n"
-                    + "WHERE FAHRZEUG_ID = ?");
-            prestmtverbrauch.setLong(1, id);
-            ResultSet rsverbrauch = prestmtverbrauch.executeQuery();
-            rsverbrauch.next();
+            Fahrzeug fahrzeug = DatenbankAbfrage.abfrageFahrzeug(id);
+            Kraftstoff kraftstoff = DatenbankAbfrage.abfrageKraftstoff(fahrzeug.getKraftstoff());
 
-            double preis = rsverbrauch.getDouble("Preis");
-            double verbrauch = rsverbrauch.getDouble("Verbrauch");
+            double preis = kraftstoff.getPreis();
+            double verbrauch = fahrzeug.getVerbrauch();
             double kosten = ((Verschleißwerte.verschleiß(id, strecke) + strecke) * verbrauch / 100) * preis;
 
             System.out.println("Für eine Strecke von " + strecke + "km, betragen die Kosten " + kosten + "€.");
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             System.out.println(ex);
         }
     }
@@ -199,25 +195,18 @@ public class Main {
 
             id = Sparsamkeit.sparsamkeit(strecke);
 
-            PreparedStatement prestmtfahrzeug = con.prepareStatement("SELECT * FROM KFZ.FAHRZEUGE\n"
-                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.ID = KFZ.FAHRZEUGE.KLASSEN_ID\n"
-                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.ID = KFZ.FAHRZEUGE.KRAFTSTOFF_ID\n"
-                    + "WHERE FAHRZEUG_ID = ?");
-            prestmtfahrzeug.setLong(1, id);
-            ResultSet fahrzeug = prestmtfahrzeug.executeQuery();
-            fahrzeug.next();
+            Fahrzeug fahrzeug = DatenbankAbfrage.abfrageFahrzeug(id);
+            Kraftstoff kraftstoff = DatenbankAbfrage.abfrageKraftstoff(fahrzeug.getKraftstoff());
 
-            double preis = fahrzeug.getDouble("Preis");
+            double preis = kraftstoff.getPreis();
             double kosten = (Verschleißwerte.verschleiß(id, strecke) + strecke) * preis;
 
             System.out.println("Das günstigste Auto für eine Strecke von " + strecke + "km,");
-            System.out.println("ist der Wagen von " + fahrzeug.getString("Besitzer") + ", ");
+            System.out.println("ist der Wagen von " + fahrzeug.getBesitzer() + ", ");
             System.out.println("es entstehen Kosten in Höhe von " + kosten + "€.");
-            
+
             Datenbank.anzeigenFahrzeugDatenbank(id);
-            
-            prestmtfahrzeug.close();
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             System.out.println(ex);
         }
     }

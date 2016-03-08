@@ -1,11 +1,10 @@
 package de.decoit.fahrzeugverwaltung.subKlassen;
 
-import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank;
+import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.DatenbankAbfrage;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportInterface;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.util.ArrayList;
 
 public class BerichtExport implements ExportInterface {
 
@@ -19,21 +18,18 @@ public class BerichtExport implements ExportInterface {
 
         try (PrintStream out = new PrintStream(new FileOutputStream(pfad.pfad() + dateiname.dateiname(name)))) {
 
-            Statement stmtbericht = Datenbank.con.createStatement();
-            ResultSet bericht = stmtbericht.executeQuery("SELECT * FROM Fahrzeuge\n"
-                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
-                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF");
+            ArrayList<Fahrzeug> fahrzeuge = DatenbankAbfrage.abfrageFahrzeugListe();
 
-            while (bericht.next()) {
+            for (Fahrzeug bericht : fahrzeuge) {
 
-                export = export + "ID: " + bericht.getInt("FahrzeugID")
-                        + ", Besitzer: " + bericht.getString("Besitzer")
-                        + ", Fahrzeug: " + bericht.getString("Marke") + " " + bericht.getString("Typ")
-                        + ", " + bericht.getString("Fahrzeugklasse")
-                        + ", \nVerbrauch: " + bericht.getDouble("Verbrauch")
-                        + "l/100km, Leistung: " + bericht.getInt("Leistung")
-                        + "kW, Kmstand: " + bericht.getInt("Kilometerstand")
-                        + "km, Treibstoff: " + bericht.getString("Kraftstoffart") + "\n";
+                export = export + "ID: " + bericht.getId()
+                        + ", Besitzer: " + bericht.getBesitzer()
+                        + ", Fahrzeug: " + bericht.getMarke() + " " + bericht.getTyp()
+                        + ", " + DatenbankAbfrage.abfrageKlasse(bericht.getKlasse()).getKlasse()
+                        + ", \nVerbrauch: " + bericht.getVerbrauch()
+                        + "l/100km, Leistung: " + bericht.getLeistung()
+                        + "kW, Kmstand: " + bericht.getKmstand()
+                        + "km, Treibstoff: " + DatenbankAbfrage.abfrageKraftstoff(bericht.getKraftstoff()).getKraftstoff() + "\n";
 
             }
 

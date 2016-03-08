@@ -1,11 +1,10 @@
 package de.decoit.fahrzeugverwaltung.subKlassen;
 
-import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank;
+import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.DatenbankAbfrage;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportInterface;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.util.ArrayList;
 
 public class XmlExport implements ExportInterface {
 
@@ -19,23 +18,20 @@ public class XmlExport implements ExportInterface {
 
         try (PrintStream out = new PrintStream(new FileOutputStream(pfad.pfad() + dateiname.dateiname(name)))) {
 
-            Statement stmtxml = Datenbank.con.createStatement();
-            ResultSet xml = stmtxml.executeQuery("SELECT * FROM Fahrzeuge\n"
-                    + "JOIN KFZ.KLASSEN ON KFZ.KLASSEN.KLASSENID = KFZ.FAHRZEUGE.KLASSE\n"
-                    + "JOIN KFZ.KRAFTSTOFFE ON KFZ.KRAFTSTOFFE.KRAFTSTOFFID = KFZ.FAHRZEUGE.KRAFTSTOFF");
+            ArrayList<Fahrzeug> fahrzeuge = DatenbankAbfrage.abfrageFahrzeugListe();
 
-            while (xml.next()) {
+            for (Fahrzeug xml : fahrzeuge) {
 
                 export = export + "<KFZ>\n"
-                        + "<FahrzeugID>" + xml.getInt("FahrzeugID") + "</FahrzeugID>\n"
-                        + "<Besitzer>" + xml.getString("Besitzer") + "</Besitzer>\n"
-                        + "<Marke>" + xml.getString("Marke") + "</Marke>\n"
-                        + "<Typ>" + xml.getString("Typ") + "</Typ>\n"
-                        + "<Klasse>" + xml.getString("Fahrzeugklasse") + "</Klasse>\n"
-                        + "<Verbrauch>" + xml.getDouble("Verbrauch") + "</Verbrauch>\n"
-                        + "<Leistung>" + xml.getInt("Leistung") + "</Leistung>\n"
-                        + "<Kilometerstand>" + xml.getInt("Kilometerstand") + "</Kilometerstand>\n"
-                        + "<Treibstoff>" + xml.getString("Kraftstoffart") + "</Treibstoff>\n"
+                        + "<FahrzeugID>" + xml.getId() + "</FahrzeugID>\n"
+                        + "<Besitzer>" + xml.getBesitzer() + "</Besitzer>\n"
+                        + "<Marke>" + xml.getMarke() + "</Marke>\n"
+                        + "<Typ>" + xml.getTyp() + "</Typ>\n"
+                        + "<Klasse>" + DatenbankAbfrage.abfrageKlasse(xml.getKlasse()).getKlasse() + "</Klasse>\n"
+                        + "<Verbrauch>" + xml.getVerbrauch() + "</Verbrauch>\n"
+                        + "<Leistung>" + xml.getLeistung() + "</Leistung>\n"
+                        + "<Kilometerstand>" + xml.getKmstand() + "</Kilometerstand>\n"
+                        + "<Treibstoff>" + DatenbankAbfrage.abfrageKraftstoff(xml.getKraftstoff()).getKraftstoff() + "</Treibstoff>\n"
                         + "</KFZ>\n";
 
             }
