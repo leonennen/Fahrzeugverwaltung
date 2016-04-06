@@ -1,7 +1,9 @@
-package de.decoit.fahrzeugverwaltung.subKlassen;
+package de.decoit.fahrzeugverwaltung.subKlassen.Export;
 
-import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.DatenbankAbfrage;
-import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportInterface;
+import de.decoit.fahrzeugverwaltung.subKlassen.Datenbank.DatenbankAbfrage;
+import de.decoit.fahrzeugverwaltung.subKlassen.Fahrzeug;
+import de.decoit.fahrzeugverwaltung.subKlassen.Klasse;
+import de.decoit.fahrzeugverwaltung.subKlassen.Kraftstoff;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -18,7 +20,12 @@ public class XmlExport implements ExportInterface {
 
         try (PrintStream out = new PrintStream(new FileOutputStream(pfad.pfad() + dateiname.dateiname(name)))) {
 
-            ArrayList<Fahrzeug> fahrzeuge = DatenbankAbfrage.abfrageFahrzeugListe();
+            Fahrzeug fahrzeug = new Fahrzeug();
+            Klasse klasse = new Klasse();
+            Kraftstoff kraftstoff = new Kraftstoff();
+            ArrayList<Fahrzeug> fahrzeuge = DatenbankAbfrage.abfrageListe(fahrzeug);
+            klasse = (Klasse) DatenbankAbfrage.abfrageObjekt(klasse, fahrzeug.getKlasse());
+            kraftstoff = (Kraftstoff) DatenbankAbfrage.abfrageObjekt(kraftstoff, fahrzeug.getKraftstoff());
 
             for (Fahrzeug xml : fahrzeuge) {
 
@@ -27,11 +34,11 @@ public class XmlExport implements ExportInterface {
                         + "<Besitzer>" + xml.getBesitzer() + "</Besitzer>\n"
                         + "<Marke>" + xml.getMarke() + "</Marke>\n"
                         + "<Typ>" + xml.getTyp() + "</Typ>\n"
-                        + "<Klasse>" + DatenbankAbfrage.abfrageKlasse(xml.getKlasse()).getKlasse() + "</Klasse>\n"
+                        + "<Klasse>" + klasse.getKlasse() + "</Klasse>\n"
                         + "<Verbrauch>" + xml.getVerbrauch() + "</Verbrauch>\n"
                         + "<Leistung>" + xml.getLeistung() + "</Leistung>\n"
                         + "<Kilometerstand>" + xml.getKmstand() + "</Kilometerstand>\n"
-                        + "<Treibstoff>" + DatenbankAbfrage.abfrageKraftstoff(xml.getKraftstoff()).getKraftstoff() + "</Treibstoff>\n"
+                        + "<Treibstoff>" + kraftstoff.getKraftstoff() + "</Treibstoff>\n"
                         + "</KFZ>\n";
 
             }

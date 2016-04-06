@@ -1,4 +1,4 @@
-package de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe;
+package de.decoit.fahrzeugverwaltung.subKlassen.Export;
 
 public interface ExportInterface {
 

@@ -1,6 +1,4 @@
-package de.decoit.fahrzeugverwaltung.subKlassen;
-
-import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Dateiname;
+package de.decoit.fahrzeugverwaltung.subKlassen.Export;
 
 public class CsvName extends Dateiname {
 

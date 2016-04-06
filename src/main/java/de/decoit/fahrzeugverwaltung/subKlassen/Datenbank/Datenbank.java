@@ -1,6 +1,8 @@
-package de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe;
+package de.decoit.fahrzeugverwaltung.subKlassen.Datenbank;
 
+import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Helper;
 import de.decoit.fahrzeugverwaltung.subKlassen.Fahrzeug;
+import de.decoit.fahrzeugverwaltung.subKlassen.Klasse;
 import de.decoit.fahrzeugverwaltung.subKlassen.Kraftstoff;
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,15 +11,21 @@ public class Datenbank {
 
     public static void listeDatenbank() {
 
-        ArrayList<Fahrzeug> fahrzeuge = DatenbankAbfrage.abfrageFahrzeugListe();
-
         try {
+            Fahrzeug fahrzeug = new Fahrzeug();
+            Klasse klasse = new Klasse();
+            Kraftstoff kraftstoff = new Kraftstoff();
+            ArrayList<Fahrzeug> fahrzeuge = DatenbankAbfrage.abfrageListe(fahrzeug);
+
             for (Fahrzeug o : fahrzeuge) {
+
+                klasse = (Klasse) DatenbankAbfrage.abfrageObjekt(klasse, o.getKlasse());
+                kraftstoff = (Kraftstoff) DatenbankAbfrage.abfrageObjekt(kraftstoff, o.getKraftstoff());
 
                 System.out.println("ID: " + o.getId() + ", Besitzer: " + o.getBesitzer()
                         + ", Fahrzeug: " + o.getMarke() + " " + o.getTyp() + ", "
-                        + DatenbankAbfrage.abfrageKlasse(o.getKlasse()).getKlasse()
-                        + ", Antrieb: " + DatenbankAbfrage.abfrageKraftstoff(o.getKraftstoff()).getKraftstoff());
+                        + klasse.getKlasse()
+                        + ", Antrieb: " + kraftstoff.getKraftstoff());
             }
         } catch (Exception ex) {
             System.out.println(ex);
@@ -27,7 +35,8 @@ public class Datenbank {
 
     public static void listeKraftstoffDatenbank() {
 
-        ArrayList<Kraftstoff> kraftstoffe = DatenbankAbfrage.abfrageKraftstoffListe();
+        Kraftstoff kraftstoff = new Kraftstoff();
+        ArrayList<Kraftstoff> kraftstoffe = DatenbankAbfrage.abfrageListe(kraftstoff);
 
         try {
             for (Kraftstoff o : kraftstoffe) {
@@ -45,17 +54,40 @@ public class Datenbank {
 
         try {
 
-            System.out.println("Besitzer des Fahrzeugs:");
+            boolean b;
             String neubesitzer;
-            neubesitzer = Helper.user_input.readLine();
-
-            System.out.println("Marke des Autos:");
             String neumarke;
-            neumarke = Helper.user_input.readLine();
-
-            System.out.println("Autotyp:");
             String neutyp;
-            neutyp = Helper.user_input.readLine();
+
+            do {
+                System.out.println("Besitzer des Fahrzeugs:");
+                neubesitzer = Helper.user_input.readLine();
+
+                b = neubesitzer.matches("^[A-ZÄÖÜ][a-zA-ZäÄöÖüÜß]+[ ][a-zA-ZäÄöÖüÜß]+([-][a-zA-ZäÄöÖüÜß]+)?$");
+                if (!b) {
+                    System.out.println("Ungültiger Name");
+                }
+            } while (!b);
+
+            do {
+                System.out.println("Marke des Autos:");
+                neumarke = Helper.user_input.readLine();
+
+                b = neumarke.matches("^[A-ZÄÖÜ][a-zA-ZäÄöÖüÜß]+([ ][a-zA-ZäÄöÖüÜß]+)?$");
+                if (!b) {
+                    System.out.println("Ungültige Marke");
+                }
+            } while (!b);
+
+            do {
+                System.out.println("Autotyp:");
+                neutyp = Helper.user_input.readLine();
+                b = neutyp.matches("^[a-zA-ZäÄöÖüÜß][a-zA-ZäÄöÖüÜß]+([ ][a-zA-ZäÄöÖüÜß]+)?$");
+                if (!b) {
+                    System.out.println("Ungültiger Typ");
+                }
+
+            } while (!b);
 
             int neuklasse = 0;                                        //Fahrzeugklasse
             do {
@@ -176,9 +208,10 @@ public class Datenbank {
             listeDatenbank();
             Helper.user_input.readLine();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.err.println(e);
         }
+
     }
 
     public static void bearbeitenFahrzeugDatenbank(int id) {
@@ -186,17 +219,40 @@ public class Datenbank {
         try {
             ResultSet rs;
 
-            System.out.println("Besitzer des Fahrzeugs:");
+            boolean b;
             String neubesitzer;
-            neubesitzer = Helper.user_input.readLine();
-
-            System.out.println("Marke des Autos:");
             String neumarke;
-            neumarke = Helper.user_input.readLine();
-
-            System.out.println("Autotyp:");
             String neutyp;
-            neutyp = Helper.user_input.readLine();
+
+            do {
+                System.out.println("Besitzer des Fahrzeugs:");
+                neubesitzer = Helper.user_input.readLine();
+
+                b = neubesitzer.matches("^[A-ZÄÖÜ][a-zA-ZäÄöÖüÜß]+[ ][a-zA-ZäÄöÖüÜß]+([-][a-zA-ZäÄöÖüÜß]+)?$");
+                if (!b) {
+                    System.out.println("Ungültiger Name");
+                }
+            } while (!b);
+
+            do {
+                System.out.println("Marke des Autos:");
+                neumarke = Helper.user_input.readLine();
+
+                b = neumarke.matches("^[A-ZÄÖÜ][a-zA-ZäÄöÖüÜß]+([ ][a-zA-ZäÄöÖüÜß]+)?$");
+                if (!b) {
+                    System.out.println("Ungültige Marke");
+                }
+            } while (!b);
+
+            do {
+                System.out.println("Autotyp:");
+                neutyp = Helper.user_input.readLine();
+                b = neutyp.matches("^[a-zA-ZäÄöÖüÜß][a-zA-ZäÄöÖüÜß]+([ ][a-zA-ZäÄöÖüÜß]+)?$");
+                if (!b) {
+                    System.out.println("Ungültiger Typ");
+                }
+
+            } while (!b);
 
             int neuklasse = 0;                                        //Fahrzeugklasse
             do {
@@ -345,13 +401,19 @@ public class Datenbank {
 
     public static void anzeigenFahrzeugDatenbank(int id) {
 
-        Fahrzeug fahrzeug = DatenbankAbfrage.abfrageFahrzeug(id);
+        Fahrzeug car = new Fahrzeug();
+        Kraftstoff carfuel = new Kraftstoff();
+        Klasse carclass = new Klasse();
+
+        Fahrzeug fahrzeug = (Fahrzeug) DatenbankAbfrage.abfrageObjekt(car, id);
+        Kraftstoff kraftstoff = (Kraftstoff) DatenbankAbfrage.abfrageObjekt(carfuel, fahrzeug.getKraftstoff());
+        Klasse klasse = (Klasse) DatenbankAbfrage.abfrageObjekt(carclass, fahrzeug.getKlasse());
+
         System.out.println("ID: " + fahrzeug.getId() + ", Besitzer: " + fahrzeug.getBesitzer()
                 + ", Fahrzeug: " + fahrzeug.getMarke() + " " + fahrzeug.getTyp() + ", "
                 + "Verbrauch: " + fahrzeug.getVerbrauch() + ", Leistung: " + fahrzeug.getLeistung()
                 + ", Kilometerstand: " + fahrzeug.getKmstand() + ", "
-                + DatenbankAbfrage.abfrageKlasse(fahrzeug.getKlasse()).getKlasse()
-                + ", Antrieb: " + DatenbankAbfrage.abfrageKraftstoff(fahrzeug.getKraftstoff()).getKraftstoff());
+                + klasse.getKlasse() + ", Antrieb: " + kraftstoff.getKraftstoff());
 
     }
 

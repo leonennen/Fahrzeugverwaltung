@@ -1,6 +1,6 @@
 package de.decoit.fahrzeugverwaltung;
 
-import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.DatenbankAbfrage;
+import de.decoit.fahrzeugverwaltung.subKlassen.Datenbank.DatenbankAbfrage;
 import de.decoit.fahrzeugverwaltung.subKlassen.Fahrzeug;
 import de.decoit.fahrzeugverwaltung.subKlassen.Kraftstoff;
 import java.util.ArrayList;
@@ -15,14 +15,17 @@ public class Sparsamkeit {
         double kosten;
         double referenz = 0;
         double verbrauch;
-        Kraftstoff kraftstoff;
 
-        ArrayList<Fahrzeug> fahrzeuge = DatenbankAbfrage.abfrageFahrzeugListe();
+        Fahrzeug fahrzeug = new Fahrzeug();
+        Kraftstoff kraftstoff = new Kraftstoff();
+
+        ArrayList<Fahrzeug> fahrzeuge = DatenbankAbfrage.abfrageListe(fahrzeug);
+        ArrayList<Kraftstoff> kraftstoffe = DatenbankAbfrage.abfrageListe(kraftstoff);
 
         try {
             for (Fahrzeug o : fahrzeuge) {
-                kraftstoff = DatenbankAbfrage.abfrageKraftstoff(o.getKraftstoff());
-                preis = kraftstoff.getPreis();
+
+                preis = kraftstoffe.get(o.getKraftstoff()).getPreis();
                 id = o.getId();
                 verbrauch = o.getVerbrauch();
                 kosten = (Verschleißwerte.verschleiß(id, strecke) + strecke) / 100 * verbrauch * preis;

@@ -1,6 +1,6 @@
 package de.decoit.fahrzeugverwaltung;
 
-import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.DatenbankAbfrage;
+import de.decoit.fahrzeugverwaltung.subKlassen.Datenbank.DatenbankAbfrage;
 import de.decoit.fahrzeugverwaltung.subKlassen.Fahrzeug;
 
 public class Verschleißwerte {
@@ -9,7 +9,8 @@ public class Verschleißwerte {
 
         double verschleißwert = 0;
 
-        Fahrzeug fahrzeug = DatenbankAbfrage.abfrageFahrzeug(id);
+        Fahrzeug fahrzeug = new Fahrzeug();
+        fahrzeug = (Fahrzeug) DatenbankAbfrage.abfrageObjekt(fahrzeug, id);
 
         int kmstand = fahrzeug.getKmstand();
         double streckenkorrektur = 1 + (kmstand / 500000);

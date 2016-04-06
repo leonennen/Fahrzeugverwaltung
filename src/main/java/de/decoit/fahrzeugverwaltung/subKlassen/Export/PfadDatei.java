@@ -1,4 +1,4 @@
-package de.decoit.fahrzeugverwaltung.subKlassen;
+package de.decoit.fahrzeugverwaltung.subKlassen.Export;
 
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Helper;
 

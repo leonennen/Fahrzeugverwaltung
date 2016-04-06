@@ -1,6 +1,9 @@
 package de.decoit.fahrzeugverwaltung.subKlassen;
 
-public class Fahrzeug {
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Fahrzeug implements Entity {
 
     private int id;
     private String besitzer;
@@ -11,6 +14,8 @@ public class Fahrzeug {
     private int kmstand;
     private int kraftstoff;
     private int klasse;
+
+    public static String TABLENAME = "FAHRZEUGE";
 
     public int getId() {
         return id;
@@ -84,5 +89,27 @@ public class Fahrzeug {
         this.klasse = klasse;
     }
 
+    @Override
+    public String getTablename() {
+        return TABLENAME;
+    }
+
+    @Override
+    public Fahrzeug convertiere(ResultSet rsfahrzeug) throws SQLException{
+        
+        Fahrzeug fahrzeug = new Fahrzeug();
+
+        fahrzeug.setId(rsfahrzeug.getInt("ID"));
+        fahrzeug.setBesitzer(rsfahrzeug.getString("BESITZER"));
+        fahrzeug.setMarke(rsfahrzeug.getString("MARKE"));
+        fahrzeug.setTyp(rsfahrzeug.getString("TYP"));
+        fahrzeug.setVerbrauch(rsfahrzeug.getDouble("VERBRAUCH"));
+        fahrzeug.setLeistung(rsfahrzeug.getInt("LEISTUNG"));
+        fahrzeug.setKmstand(rsfahrzeug.getInt("KILOMETERSTAND"));
+        fahrzeug.setKraftstoff(rsfahrzeug.getInt("KRAFTSTOFF_ID"));
+        fahrzeug.setKlasse(rsfahrzeug.getInt("KLASSEN_ID"));
+
+        return fahrzeug;
+    }
 
 }

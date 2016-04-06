@@ -1,11 +1,11 @@
 package de.decoit.fahrzeugverwaltung;
 
-import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datei;
-import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Datenbank;
-import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.DatenbankAbfrage;
-import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportAuswahl;
-import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.ExportInterface;
 import de.decoit.fahrzeugverwaltung.Eingabe.Ausgabe.Helper;
+import de.decoit.fahrzeugverwaltung.subKlassen.Datenbank.Datenbank;
+import de.decoit.fahrzeugverwaltung.subKlassen.Datenbank.DatenbankAbfrage;
+import de.decoit.fahrzeugverwaltung.subKlassen.Export.Datei;
+import de.decoit.fahrzeugverwaltung.subKlassen.Export.ExportAuswahl;
+import de.decoit.fahrzeugverwaltung.subKlassen.Export.ExportInterface;
 import de.decoit.fahrzeugverwaltung.subKlassen.Fahrzeug;
 import de.decoit.fahrzeugverwaltung.subKlassen.Kraftstoff;
 
@@ -152,7 +152,8 @@ public class Main {
                     strecke = Integer.parseInt(Helper.user_input.readLine());
                     if (strecke <= 0) {
                         strecke = 0;
-                        throw new IllegalStateException("Bitte eine Strecke größer 0 eingeben!");
+                        throw new IllegalStateException("Bitte eine Strecke "
+                                + "größer 0 eingeben!");
                     }
                 } catch (NumberFormatException | IllegalStateException ex) {
                     System.out.println("Keine gültige Zahl!");
@@ -160,14 +161,18 @@ public class Main {
                 }
             } while (id == 0);
 
-            Fahrzeug fahrzeug = DatenbankAbfrage.abfrageFahrzeug(id);
-            Kraftstoff kraftstoff = DatenbankAbfrage.abfrageKraftstoff(fahrzeug.getKraftstoff());
+            Fahrzeug fahrzeug = new Fahrzeug();
+            Kraftstoff kraftstoff = new Kraftstoff();
+            fahrzeug = (Fahrzeug) DatenbankAbfrage.abfrageObjekt(fahrzeug, id);
+            int fuelid = fahrzeug.getKraftstoff();
+            kraftstoff = (Kraftstoff) DatenbankAbfrage.abfrageObjekt(kraftstoff, fuelid);
 
             double preis = kraftstoff.getPreis();
             double verbrauch = fahrzeug.getVerbrauch();
             double kosten = ((Verschleißwerte.verschleiß(id, strecke) + strecke) * verbrauch / 100) * preis;
 
-            System.out.println("Für eine Strecke von " + strecke + "km, betragen die Kosten " + kosten + "€.");
+            System.out.println("Für eine Strecke von " + strecke
+                    + "km, betragen die Kosten " + kosten + "€.");
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -194,12 +199,15 @@ public class Main {
             } while (strecke == 0);
 
             id = Sparsamkeit.sparsamkeit(strecke);
-
-            Fahrzeug fahrzeug = DatenbankAbfrage.abfrageFahrzeug(id);
-            Kraftstoff kraftstoff = DatenbankAbfrage.abfrageKraftstoff(fahrzeug.getKraftstoff());
+            Fahrzeug fahrzeug = new Fahrzeug();
+            Kraftstoff kraftstoff = new Kraftstoff();
+            fahrzeug = (Fahrzeug) DatenbankAbfrage.abfrageObjekt(fahrzeug, id);
+            int fuelid = fahrzeug.getKraftstoff();
+            kraftstoff = (Kraftstoff) DatenbankAbfrage.abfrageObjekt(kraftstoff, fuelid);
 
             double preis = kraftstoff.getPreis();
-            double kosten = (Verschleißwerte.verschleiß(id, strecke) + strecke) * preis;
+            double verbrauch = fahrzeug.getVerbrauch();
+            double kosten = ((Verschleißwerte.verschleiß(id, strecke) + strecke) * verbrauch / 100) * preis;
 
             System.out.println("Das günstigste Auto für eine Strecke von " + strecke + "km,");
             System.out.println("ist der Wagen von " + fahrzeug.getBesitzer() + ", ");
