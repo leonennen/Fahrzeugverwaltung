@@ -73,7 +73,7 @@ public class Datenbank {
                 System.out.println("Marke des Autos:");
                 neumarke = Helper.user_input.readLine();
 
-                b = neumarke.matches("^[A-ZÄÖÜ][a-zA-ZäÄöÖüÜß]+([ ][a-zA-ZäÄöÖüÜß]+)?$");
+                b = neumarke.matches("^[A-ZÄÖÜ][a-zA-ZäÄöÖüÜß]+([ -][a-zA-ZäÄöÖüÜß]+)?$");
                 if (!b) {
                     System.out.println("Ungültige Marke");
                 }
@@ -82,7 +82,7 @@ public class Datenbank {
             do {
                 System.out.println("Autotyp:");
                 neutyp = Helper.user_input.readLine();
-                b = neutyp.matches("^[a-zA-ZäÄöÖüÜß][a-zA-ZäÄöÖüÜß]+([ ][a-zA-ZäÄöÖüÜß]+)?$");
+                b = neutyp.matches("^[a-zA-Z0-9äÄöÖüÜß]+([ ][a-zA-Z0-9äÄöÖüÜß]+)?$");
                 if (!b) {
                     System.out.println("Ungültiger Typ");
                 }
@@ -420,7 +420,7 @@ public class Datenbank {
     public static void löschenFahrzeugDatenbank(int id) {
 
         try {
-            PreparedStatement prestmtloeschen = con.prepareStatement("DELETE FROM Fahrzeuge WHERE FAHRZEUG_ID = ?");
+            PreparedStatement prestmtloeschen = con.prepareStatement("DELETE FROM Fahrzeuge WHERE ID = ?");
             prestmtloeschen.setLong(1, id);
             prestmtloeschen.executeUpdate();
             System.out.println("Fahrzeug gelöscht!");
